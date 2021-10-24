@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="C:/Users/reiva/.p2/pool/plugins/com.ibm.icu_67.1.0.v20200706-1749.jar" sourcepath="C:/Users/reiva/.p2/pool/plugins/com.ibm.icu_67.1.0.v20200706-1749.jar"/>
 	<classpathentry kind="lib" path="C:/Users/reiva/.p2/pool/plugins/org.eclipse.ui.forms_3.11.0.v20201025-0656.jar" sourcepath="C:/Users/reiva/.p2/pool/plugins/org.eclipse.ui.forms_3.11.0.v20201025-0656.jar"/>
 	<classpathentry kind="lib" path="C:/Users/reiva/Desktop/Programacion III/TP3/gson-2.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

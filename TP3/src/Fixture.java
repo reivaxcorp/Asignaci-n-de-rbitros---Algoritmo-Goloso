@@ -16,12 +16,79 @@ public class Fixture {
 		for (int fecha = 0; fecha < cantFechas; fecha++) this.fechas.add(new ArrayList<Partido>());
 		this.equiposDisponibles = new ArrayList<String>();
 		this.seleccionAleatoria = new Random();
-		crearListaEquipos();
-		generarFechas(); 
+		crearListaPorDefectoEquipos();
+		generarFechas(equiposDisponibles); 
 		informacionUI();
 	}
 
+	private void crearListaPorDefectoEquipos() {
 
+		for(Equipos equipo: Equipos.values()) {
+			agregarEquipo(equipo.getNombreEquipo());
+		}
+		actualizarCantidadPartidos();
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean generarFechas(ArrayList<String> equiposDisponibles) {
+		
+		if(equiposDisponibles.size() % 2 != 0)
+			throw new IllegalArgumentException("El numero de equipos debe ser par.");
+		if(equiposDisponibles.size() < 2)
+			throw new IllegalArgumentException("La cantidad de equipos debe ser mayor que uno.");
+		
+		for (int fecha = 0; fecha < cantFechas; fecha++) {
+			ArrayList<String> equipos =  (ArrayList<String>) equiposDisponibles.clone();
+			for (int partido = 0; partido < cantPartidosPorFecha; partido++) {
+				fechas.get(fecha).add(armarEquipo(equipos));			
+			}
+		}
+		return true;
+	}
+	
+	public void agregarEquipo(String equipo) {
+		
+		if(equipo.equals("") && equipo.length() < 3)
+			throw new IllegalArgumentException("El nombre del equipo es invalido");
+		if(existeEquipo(equipo))
+			throw new IllegalArgumentException("El equipo ya existe");
+		
+		equiposDisponibles.add(equipo);
+		
+		actualizarCantidadPartidos();
+	}
+
+	private Partido armarEquipo(ArrayList<String> equipos) {
+
+		int posicionAleatoriaEquipoUno = seleccionAleatoria.nextInt(equipos.size());
+		String equipoUno = equipos.get(posicionAleatoriaEquipoUno);
+		equipos.remove(posicionAleatoriaEquipoUno);
+
+		int posicionAleatoriaEquipoDos = seleccionAleatoria.nextInt(equipos.size());
+		String equipoDos = equipos.get(posicionAleatoriaEquipoDos);
+		equipos.remove(posicionAleatoriaEquipoDos);
+		
+		if(equipoUno.equals(equipoDos))
+			throw new RuntimeException("Los equipos son iguales");
+		
+		return new Partido(equipoUno, equipoDos, 0);
+		
+	}
+	
+	private void actualizarCantidadPartidos() {
+		cantPartidosPorFecha = equiposDisponibles.size() / 2;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<ArrayList<Partido>> obtenerFechas() {
+		return (ArrayList<ArrayList<Partido>>) fechas.clone();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<String> obtenerEquiposDisponibles() {
+		return (ArrayList<String>) equiposDisponibles.clone();
+	}
+	
 	private void informacionUI() {
 		for(int fecha = 0; fecha <  fechas.size(); fecha ++) {
 			for(int partidos = 0; partidos <  cantPartidosPorFecha; partidos ++) {
@@ -32,46 +99,12 @@ public class Fixture {
 		}
 	}
 
+	private boolean existeEquipo(String equipo) {
+		return equiposDisponibles.contains(equipo);
+	}
 	
-	private void crearListaEquipos() {
-		
-		if(Equipo.values().length % 2 != 0)
-			throw new IllegalArgumentException("El numero de equipos debe ser par.");
-		if(Equipo.values().length < 2)
-			throw new IllegalArgumentException("La cantidad de equipos debe ser mayor que uno.");
-		
-		for(Equipo equipo: Equipo.values()) {
-			equiposDisponibles.add(equipo.getNombreEquipo());
-		}
-		cantPartidosPorFecha = equiposDisponibles.size() / 2;
-	}
-
-	private void generarFechas() {
-		
-		for (int fecha = 0; fecha < cantFechas; fecha++) {
-			for (int partido = 0; partido < cantPartidosPorFecha; partido++) {
-				fechas.get(fecha).add(obtenerEquipo());			
-			}
-			crearListaEquipos(); // generamos de nuevo la lista para la siguiente fecha
-		}
-	}
-
-	private Partido obtenerEquipo() {
-
-		
-		int posicionAleatoriaEquipoUno = seleccionAleatoria.nextInt(equiposDisponibles.size());
-		String equipoUno = equiposDisponibles.get(posicionAleatoriaEquipoUno);
-		equiposDisponibles.remove(posicionAleatoriaEquipoUno);
-
-		int posicionAleatoriaEquipoDos = seleccionAleatoria.nextInt(equiposDisponibles.size());
-		String equipoDos = equiposDisponibles.get(posicionAleatoriaEquipoDos);
-		equiposDisponibles.remove(posicionAleatoriaEquipoDos);
-		
-		return new Partido(equipoUno, equipoDos);
-		
-	}
-
-	private enum Equipo {
+	// equipos por defecto
+	private enum Equipos {
 
 		BOCA_JUNIORS("Boca Juniors"), RIVER_PLATE("River Plate"), TALLERES("Talleres"), HURACAN("Huracán"),
 		COLON("Colón"), INDEPENDIENTE("Independiente"), RACING("Racing"), GODOY_CRUZ("Godoy Cruz"),
@@ -82,7 +115,7 @@ public class Fixture {
 
 		private String nombreEquipo;
 
-		private Equipo(String nombreEquipo) {
+		private Equipos(String nombreEquipo) {
 			this.nombreEquipo = nombreEquipo;
 		}
 
