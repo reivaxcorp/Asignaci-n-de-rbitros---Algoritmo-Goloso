@@ -55,5 +55,6 @@ public class MainUI extends JFrame {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(253, 62, 144, 396);
 		contentPane.add(scrollPane_1);
+		new Fixture();
 	}
 }
