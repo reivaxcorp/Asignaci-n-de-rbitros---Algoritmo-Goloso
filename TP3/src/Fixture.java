@@ -9,15 +9,11 @@ public class Fixture {
 	private int cantPartidosPorFecha = 0;
 	private Random seleccionAleatoria;
 	private ArrayList<String> equiposDisponibles;
-	private ArrayList<Partido> equiposCreados;
 	
 	public Fixture() {
 		
-		
-		
 		this.fechas = new ArrayList<ArrayList<Partido>>(cantFechas);
 		for (int fecha = 0; fecha < cantFechas; fecha++) this.fechas.add(new ArrayList<Partido>());
-		this.equiposCreados = new ArrayList<Partido>();
 		this.equiposDisponibles = new ArrayList<String>();
 		this.seleccionAleatoria = new Random();
 		crearListaEquipos();
@@ -41,7 +37,7 @@ public class Fixture {
 		
 		if(Equipo.values().length % 2 != 0)
 			throw new IllegalArgumentException("El numero de equipos debe ser par.");
-		if(Equipo.values().length < 1)
+		if(Equipo.values().length < 2)
 			throw new IllegalArgumentException("La cantidad de equipos debe ser mayor que uno.");
 		
 		for(Equipo equipo: Equipo.values()) {
@@ -70,11 +66,12 @@ public class Fixture {
 		int posicionAleatoriaEquipoDos = seleccionAleatoria.nextInt(equiposDisponibles.size());
 		String equipoDos = equiposDisponibles.get(posicionAleatoriaEquipoDos);
 		equiposDisponibles.remove(posicionAleatoriaEquipoDos);
+		
 		return new Partido(equipoUno, equipoDos);
 		
 	}
 
-	enum Equipo {
+	private enum Equipo {
 
 		BOCA_JUNIORS("Boca Juniors"), RIVER_PLATE("River Plate"), TALLERES("Talleres"), HURACAN("Huracán"),
 		COLON("Colón"), INDEPENDIENTE("Independiente"), RACING("Racing"), GODOY_CRUZ("Godoy Cruz"),
