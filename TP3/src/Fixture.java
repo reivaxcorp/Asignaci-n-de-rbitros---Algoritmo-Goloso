@@ -18,7 +18,7 @@ public class Fixture {
 		this.seleccionAleatoria = new Random();
 		crearListaPorDefectoEquipos();
 		generarFechas(equiposDisponibles); 
-		informacionUI();
+		//informacionUI();
 	}
 
 	private void crearListaPorDefectoEquipos() {

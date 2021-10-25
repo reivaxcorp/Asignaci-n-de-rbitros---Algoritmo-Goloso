@@ -1,5 +1,6 @@
+import java.util.Comparator;
 
-public class  Partido {
+public class  Partido implements Comparator<Partido> {
 
 	private String local;
 	private String visitante;
@@ -28,6 +29,15 @@ public class  Partido {
 
 	public void setArbitro(int arbitro) {
 		this.arbitro = arbitro;
+	}
+
+
+	@Override
+	public int compare(Partido partidoUno, Partido partidoDos) {
+		if(partidoUno.getArbitro() == partidoDos.getArbitro()) {
+			return -1;
+		} 
+		return 0;
 	}
 
 }
