@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -17,33 +18,42 @@ public class AlgoritmoGolosoMain {
 	}
 	
 	public void generarAlgoritmoGoloso(HashMap<Integer, ArrayList<Partido>> fechas) {
-		
-		HashMap<Integer, ArrayList<Partido>> pFechas = fechas;
-		HashMap<String, ArrayList<Integer>> arbitros = crearListaArbitros(pFechas);
-		
-		for (int fecha = 0; fecha < pFechas.size(); fecha++) {
-			for (int partido = 0; partido < fechas.get(fecha).size(); partido++) {
 
-				 // la cantidad de partidos por fecha, son el numero de arbitros
-				int arbitroRandom = rn.nextInt(arbitros.get(String.valueOf(fecha)).size()); // obtenemos un arbitro aleatorio de esa fecha
-				int arbitro = arbitros.get(String.valueOf(fecha)).get(arbitroRandom); // el valor o arbitro
-				fechas.get(fecha).get(partido).setArbitro(arbitro+1); // colocamos un arbitro al partido
-				arbitros.get(String.valueOf(fecha)).remove(arbitroRandom); // lo eliminamos para que no se repita en la misma fecha
+		if (fechas != null && !fechas.isEmpty()) {
+
+			HashMap<Integer, ArrayList<Partido>> pFechas = fechas;
+			HashMap<String, ArrayList<Integer>> arbitros = crearListaArbitrosPorFecha(pFechas);
+
+			for (int fecha = 0; fecha < pFechas.size(); fecha++) {
+				for (int partido = 0; partido < fechas.get(fecha).size(); partido++) {
+
+					// la cantidad de partidos por fecha, son el numero de arbitros
+					int arbitroRandom = rn.nextInt(arbitros.get(String.valueOf(fecha)).size()); // obtenemos un arbitro
+																								// aleatorio de esa
+																								// fecha
+					int arbitro = arbitros.get(String.valueOf(fecha)).get(arbitroRandom); // el valor o arbitro
+					fechas.get(fecha).get(partido).setArbitro(arbitro + 1); // colocamos un arbitro al partido
+					arbitros.get(String.valueOf(fecha)).remove(arbitroRandom); // lo eliminamos para que no se repita en
+																				// la misma fecha
+				}
 			}
+			colocarDatosDeAlgoritmoGolosoUI(pFechas);
+		} else {
+			throw new RuntimeException("Fechas incorrectas");
 		}
-		colocarDatosDeAlgoritmoGolosoUI(pFechas);
 	}
 	
 	// un arbitro por partido
-	private HashMap<String, ArrayList<Integer>> crearListaArbitros(HashMap<Integer, ArrayList<Partido>> fechas) {
+	@SuppressWarnings("unlikely-arg-type")
+	public HashMap<String, ArrayList<Integer>> crearListaArbitrosPorFecha(HashMap<Integer, ArrayList<Partido>> fechas) {
 		HashMap<String, ArrayList<Integer>> arbitros
 							                   = new HashMap<String, ArrayList<Integer>>();
 
 		for (int fecha = 0; fecha < fechas.size(); fecha++) {
-			arbitros.put(String.valueOf(fecha), new ArrayList<Integer>());		
-			for (int partido = 0; partido < fechas.get(fecha).size(); partido++) {
-				arbitros.get(String.valueOf(fecha)).add(partido);
-			}
+			arbitros.put(String.valueOf(fecha), new ArrayList<Integer>());	
+				for (int partido = 0; partido < fechas.get(fecha).size(); partido++) {
+					arbitros.get(String.valueOf(fecha)).add(partido);
+				}
 		}
 	  return arbitros;		 
 	}

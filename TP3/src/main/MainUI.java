@@ -1,3 +1,5 @@
+package main;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,23 +18,6 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import com.jgoodies.forms.layout.RowSpec;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.Color;
-
 
 public class MainUI extends JFrame implements onActualizaUI{
 
@@ -41,7 +26,7 @@ public class MainUI extends JFrame implements onActualizaUI{
 	private JPanel panelArchivoCargado;
 	private JPanel panelAlgoritmoGoloso;
 	private JScrollPane scrollPaneAlgoritmoGoloso;
-    public final String EXTENCION = "json";
+	private final String EXTENCION = "json";
 	private final String NOMBRE_ARCHIVO_JSON = "fechas.json";
 	private int datosCargadosY = 10;
 	private int datosGeneradosGolosoY = 10;
@@ -136,17 +121,22 @@ public class MainUI extends JFrame implements onActualizaUI{
 		panelAlgoritmoGoloso = new JPanel();
 		panelAlgoritmoGoloso.setLayout(null);
 		
-		Fixture fix = new Fixture();
+		inicializarLogicaTP();
+		
+	}
+
+	 private void inicializarLogicaTP() {
+		 Fixture fix = new Fixture();
 		// Creamos archivo y fechas por defecto
-		 golosoMain = new AlgoritmoGolosoMain(this);
+		 this.golosoMain = new AlgoritmoGolosoMain(this);
 		 cargarDatosGuardados(fix);
 	}
 
 	private void cargarDatosGuardados(Fixture fix) {
 		  new ArchivoJSON(fix.obtenerFechas(), NOMBRE_ARCHIVO_JSON);
 		  File file = new File("./"+NOMBRE_ARCHIVO_JSON);
-          golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
-          golosoMain.colocarDatosDeArchivoUI(golosoMain.getFechas());
+		  this.golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
+		  this.golosoMain.colocarDatosDeArchivoUI(golosoMain.getFechas());
 	}
 	
 

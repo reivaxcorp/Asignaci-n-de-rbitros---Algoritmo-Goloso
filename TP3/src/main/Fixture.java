@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -7,6 +8,7 @@ public class Fixture {
 	private ArrayList<ArrayList<Partido>> fechas;
 	private int cantFechas = 13;
 	private int cantPartidosPorFecha = 0;
+
 	private Random seleccionAleatoria;
 	private ArrayList<String> equiposDisponibles;
 	
@@ -103,7 +105,17 @@ public class Fixture {
 		return equiposDisponibles.contains(equipo);
 	}
 	
+	
+	public int getCantFechas() {
+		return cantFechas;
+	}
+
+	public int getCantPartidosPorFecha() {
+		return cantPartidosPorFecha;
+	}
+
 	// equipos por defecto
+	// la cantidad de partidos dependera de la cantidad de quipos divido dos.
 	private enum Equipos {
 
 		BOCA_JUNIORS("Boca Juniors"), RIVER_PLATE("River Plate"), TALLERES("Talleres"), HURACAN("Huracán"),
