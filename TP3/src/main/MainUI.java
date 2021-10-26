@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 
 public class MainUI extends JFrame implements onActualizaUI{
@@ -52,6 +53,7 @@ public class MainUI extends JFrame implements onActualizaUI{
 	 * Create the frame.
 	 */
 	public MainUI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\reiva\\Desktop\\Programacion III\\TP3\\icon.png"));
 		setTitle("Generador de arbitros por equipos");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +76,7 @@ public class MainUI extends JFrame implements onActualizaUI{
 				
 			}
 		});
-		btnGenerarAlgoritmo.setBounds(338, 700, 89, 23);
+		btnGenerarAlgoritmo.setBounds(311, 676, 89, 23);
 		contentPane.add(btnGenerarAlgoritmo);
 		
 		JButton btnNewButton_1 = new JButton("Abrir Archivo");
@@ -90,7 +92,7 @@ public class MainUI extends JFrame implements onActualizaUI{
 		scrollPaneArchivoCargado = new JScrollPane();
 		scrollPaneArchivoCargado.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneArchivoCargado.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPaneArchivoCargado.setBounds(24, 105, 315, 546);
+		scrollPaneArchivoCargado.setBounds(24, 105, 263, 546);
 		scrollPaneArchivoCargado.setWheelScrollingEnabled(true);
 		contentPane.add(scrollPaneArchivoCargado);
 		
@@ -98,17 +100,17 @@ public class MainUI extends JFrame implements onActualizaUI{
 		scrollPaneAlgoritmoGoloso.setWheelScrollingEnabled(true);
 		scrollPaneAlgoritmoGoloso.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneAlgoritmoGoloso.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPaneAlgoritmoGoloso.setBounds(417, 105, 315, 546);
+		scrollPaneAlgoritmoGoloso.setBounds(311, 105, 448, 546);
 		contentPane.add(scrollPaneAlgoritmoGoloso);
 		
 		JLabel lblNewLabel = new JLabel("Equipos sin arbitro");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel.setBounds(88, 70, 221, 23);
+		lblNewLabel.setBounds(66, 71, 221, 23);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblEquiposConArbitros = new JLabel("Equipos con arbitros");
 		lblEquiposConArbitros.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblEquiposConArbitros.setBounds(477, 71, 221, 23);
+		lblEquiposConArbitros.setBounds(465, 71, 221, 23);
 		contentPane.add(lblEquiposConArbitros);
 		
 		JButton btnGuardarArchivo = new JButton("Guardar Archivo");
@@ -207,6 +209,7 @@ public class MainUI extends JFrame implements onActualizaUI{
 			partidoLabel.setBounds(20, espacioLabelPartidos, 300, 14);
 			espacioLabelPartidos += 17;
 			panelArchivoCargado.add(partidoLabel);
+			
 		}
 		datosCargadosY = espacioLabelPartidos;
 		
@@ -219,7 +222,7 @@ public class MainUI extends JFrame implements onActualizaUI{
 	
 	@Override
 	public void colocarfechasAlgoritmoGoloso(int fecha, ArrayList<Partido> partidos) {
-		// fecha
+				// fechas
 				JLabel jlabel = new JLabel(
 						"<html>" 
 						+"<font color=\"red\">fecha "+ Integer.toString(fecha +1)+"</font>"	
@@ -228,7 +231,7 @@ public class MainUI extends JFrame implements onActualizaUI{
 				jlabel.setBounds(10, datosGeneradosGolosoY, 100, 14);
 				panelAlgoritmoGoloso.add(jlabel);
 
-				// equipo
+				// equipos
 				int espacioLabelPartidos = datosGeneradosGolosoY + 17;
 				for(int partido = 0; partido < partidos.size(); partido ++) {
 				
@@ -237,13 +240,23 @@ public class MainUI extends JFrame implements onActualizaUI{
 							+partidos.get(partido).getLocal() 
 							+"<font color=\"green\"> VS </font>"	
 							+partidos.get(partido).getVisitante()
-							+"<font color=\"blue\"> Arbitro: </font>"
-							+partidos.get(partido).getArbitro()
 							+"</html>"
 							);
-					partidoLabel.setBounds(20, espacioLabelPartidos, 300, 14);
-					espacioLabelPartidos += 17;
+					partidoLabel.setBounds(20, espacioLabelPartidos, 250, 14);
+					
+					JLabel arbitro = new JLabel("<html><font color=\"blue\"> Arbitro: </font>"
+							+partidos.get(partido).getArbitro()
+							+"</html>");
+					arbitro.setBounds(partidoLabel.getBounds().x+partidoLabel.getBounds().width, partidoLabel.getBounds().y, 80, partidoLabel.getBounds().height);
+					
 					panelAlgoritmoGoloso.add(partidoLabel);
+					panelAlgoritmoGoloso.add(arbitro);
+					espacioLabelPartidos += 17;
+					
+					// ver boton
+					JButton resaltarEquipo = new JButton("ver");
+					resaltarEquipo.setBounds(arbitro.getBounds().x+arbitro.getBounds().width, arbitro.getBounds().y, 60, 14);
+					panelAlgoritmoGoloso.add(resaltarEquipo);
 				}
 				datosGeneradosGolosoY = espacioLabelPartidos;
 				
