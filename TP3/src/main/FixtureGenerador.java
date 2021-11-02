@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class Fixture {
+public class FixtureGenerador {
 
 	private ArrayList<ArrayList<Partido>> fechas;
 	private int cantFechas = 13;
@@ -12,7 +12,7 @@ public class Fixture {
 	private Random seleccionAleatoria;
 	private ArrayList<String> equiposDisponibles;
 	
-	public Fixture() {
+	public FixtureGenerador() {
 		
 		this.fechas = new ArrayList<ArrayList<Partido>>(cantFechas);
 		for (int fecha = 0; fecha < cantFechas; fecha++) this.fechas.add(new ArrayList<Partido>());
@@ -73,7 +73,7 @@ public class Fixture {
 		if(equipoUno.equals(equipoDos))
 			throw new RuntimeException("Los equipos son iguales");
 		
-		return new Partido(equipoUno, equipoDos, 0);
+		return new Partido(equipoUno, equipoDos, -1);
 		
 	}
 	

@@ -4,15 +4,15 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.Fixture;
+import main.FixtureGenerador;
 
 public class FixtureTest {
 
-	private Fixture fixture;
+	private FixtureGenerador fixture;
 	
 	@Before
 	public void setup() {
-		fixture = new Fixture();
+		fixture = new FixtureGenerador();
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

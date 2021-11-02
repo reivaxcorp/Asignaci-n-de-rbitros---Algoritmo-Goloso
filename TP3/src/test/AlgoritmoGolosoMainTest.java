@@ -10,21 +10,21 @@ import org.junit.Test;
 
 import main.AlgoritmoGolosoMain;
 import main.ArchivoJSON;
-import main.Fixture;
+import main.FixtureGenerador;
 import main.Partido;
 
 public class AlgoritmoGolosoMainTest {
 
 	private FakeMainUITest fakeMainUITest;
 	private AlgoritmoGolosoMain algoritmoGolosoMain;
-	private Fixture fix;
+	private FixtureGenerador fix;
 	private final String NOMBRE_ARCHIVO_JSON = "fechas.json";
 
 	@Before
 	public void setup() {
 		this.fakeMainUITest = new FakeMainUITest();
 		this.algoritmoGolosoMain = new AlgoritmoGolosoMain(fakeMainUITest);
-		this.fix = new Fixture();
+		this.fix = new FixtureGenerador();
 		new ArchivoJSON(fix.obtenerFechas(), NOMBRE_ARCHIVO_JSON);
 		File file = new File("./"+NOMBRE_ARCHIVO_JSON);
 		this.algoritmoGolosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
@@ -33,14 +33,14 @@ public class AlgoritmoGolosoMainTest {
 	
 	@Test(expected = RuntimeException.class)
 	public void generarAlgoritmoGoloso_fechasNull_expetion() {
-		algoritmoGolosoMain.generarAlgoritmoGoloso(null);
+		algoritmoGolosoMain.generarAlgoritmoGoloso(null, -1);
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void generarAlgoritmoGoloso_fechasEmpty_expetion() {
 		HashMap<Integer, ArrayList<Partido>> fechas = algoritmoGolosoMain.getFechas();
 		fechas.clear();
-		algoritmoGolosoMain.generarAlgoritmoGoloso(fechas);
+		algoritmoGolosoMain.generarAlgoritmoGoloso(fechas, -1);
 	}
 	
 	@Test(expected = RuntimeException.class)

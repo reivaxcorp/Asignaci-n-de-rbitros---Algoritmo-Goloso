@@ -5,7 +5,7 @@ import main.Partido;
 import main.onActualizaUI;
 
 public class FakeMainUITest implements onActualizaUI{
-
+	
 	@Override
 	public void colocarfechasDeArchivoUI(int fecha, ArrayList<Partido> partidos) {
 		//System.out.println("Fake UPDATE");

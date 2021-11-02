@@ -6,33 +6,47 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
+
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
+import javax.swing.JTextField;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
-public class MainUI extends JFrame implements onActualizaUI{
+public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JScrollPane scrollPaneArchivoCargado;
 	private JPanel panelArchivoCargado;
 	private JPanel panelAlgoritmoGoloso;
 	private JScrollPane scrollPaneAlgoritmoGoloso;
+	private JButton btnGenerarAlgoritmo;
+	private  Pattern pattern;
 	private final String EXTENCION = "json";
 	private final String NOMBRE_ARCHIVO_JSON = "fechas.json";
 	private int datosCargadosY = 10;
 	private int datosGeneradosGolosoY = 10;
+	private int cantidadArbitrosPorDefecto = 13;
 	
 	private AlgoritmoGolosoMain golosoMain;
+	private JTextField cantidadArbitrostField;
 	/**
 	 * Launch the application.
 	 */
@@ -53,6 +67,9 @@ public class MainUI extends JFrame implements onActualizaUI{
 	 * Create the frame.
 	 */
 	public MainUI() {
+		
+		this.pattern = Pattern.compile("^[0]|\\D"); // true si es cero el primer caracter  y si no es un digito
+		 
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\reiva\\Desktop\\Programacion III\\TP3\\icon.png"));
 		setTitle("Generador de arbitros por equipos");
 		
@@ -65,15 +82,10 @@ public class MainUI extends JFrame implements onActualizaUI{
 		
 	  
 		
-		JButton btnGenerarAlgoritmo = new JButton("Generar");
+	    btnGenerarAlgoritmo = new JButton("Generar");
 		btnGenerarAlgoritmo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				HashMap<Integer, ArrayList<Partido>> fechas = golosoMain.getFechas();
-				resetUIAlgoritmoGoloso();
-				golosoMain.generarAlgoritmoGoloso(fechas);
-				golosoMain.colocarDatosDeAlgoritmoGolosoUI(fechas);
-				
+			public void actionPerformed(ActionEvent e) {	
+				 mostrarResultadosAlgoritmoGoloso();
 			}
 		});
 		btnGenerarAlgoritmo.setBounds(311, 676, 89, 23);
@@ -117,6 +129,19 @@ public class MainUI extends JFrame implements onActualizaUI{
 		btnGuardarArchivo.setBounds(224, 0, 190, 23);
 		contentPane.add(btnGuardarArchivo);
 		
+		cantidadArbitrostField = new JTextField();
+		cantidadArbitrostField.setColumns(1);
+		cantidadArbitrostField.addKeyListener(this);
+	
+		cantidadArbitrostField.setToolTipText("Cantidad de arbitros");
+		cantidadArbitrostField.setBounds(181, 677, 86, 20);
+		contentPane.add(cantidadArbitrostField);
+		cantidadArbitrostField.setText(Integer.toString(cantidadArbitrosPorDefecto));
+		
+		JLabel lblNewLabelCantidadArbitros = new JLabel("Cantidad Arbitros");
+		lblNewLabelCantidadArbitros.setBounds(67, 680, 104, 14);
+		contentPane.add(lblNewLabelCantidadArbitros);
+		
 		panelArchivoCargado = new JPanel();
 		panelArchivoCargado.setLayout(null);
 		
@@ -128,19 +153,31 @@ public class MainUI extends JFrame implements onActualizaUI{
 	}
 
 	 private void inicializarLogicaTP() {
-		 Fixture fix = new Fixture();
+		 FixtureGenerador fix = new FixtureGenerador();
 		// Creamos archivo y fechas por defecto
 		 this.golosoMain = new AlgoritmoGolosoMain(this);
 		 cargarDatosGuardados(fix);
 	}
 
-	private void cargarDatosGuardados(Fixture fix) {
+	private void cargarDatosGuardados(FixtureGenerador fix) {
 		  new ArchivoJSON(fix.obtenerFechas(), NOMBRE_ARCHIVO_JSON);
 		  File file = new File("./"+NOMBRE_ARCHIVO_JSON);
 		  this.golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
 		  this.golosoMain.colocarDatosDeArchivoUI(golosoMain.getFechas());
 	}
 	
+	private void mostrarResultadosAlgoritmoGoloso() {
+		
+		new Thread() {
+			    public void run() {
+					HashMap<Integer, ArrayList<Partido>> fechas = golosoMain.getFechas();
+					resetUIAlgoritmoGoloso();
+					fechas = golosoMain.generarAlgoritmoGoloso(fechas, cantidadArbitrosPorDefecto);
+					golosoMain.colocarDatosDeAlgoritmoGolosoUI(fechas);
+			    };
+		 }.start();
+		 
+	}
 
 	private void abrirArchivo() {
 		//Create a file chooser
@@ -275,5 +312,28 @@ public class MainUI extends JFrame implements onActualizaUI{
 		panelArchivoCargado.removeAll();
 		scrollPaneArchivoCargado.setViewportView(null);
 		this.datosCargadosY = 10;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	   // TODO no implemented
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO no implemented
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		 Matcher disableGenerador = pattern.matcher(cantidadArbitrostField.getText());
+		 boolean off = disableGenerador.find();
+		 if(off || cantidadArbitrostField.getText().isEmpty()) {
+			 btnGenerarAlgoritmo.setEnabled(false);
+		 } else {
+			 btnGenerarAlgoritmo.setEnabled(true);
+			 this.cantidadArbitrosPorDefecto = Integer.valueOf(cantidadArbitrostField.getText());
+		 }
+		
 	}
 }
