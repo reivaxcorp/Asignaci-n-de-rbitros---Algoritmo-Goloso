@@ -2,32 +2,37 @@
   "datoJson": {
     "0": [
       {
-        "local": "Godoy Cruz",
-        "visitante": "Colón",
+        "local": "Rosario Central",
+        "visitante": "Newell\u0027s",
         "arbitro": -1
       },
       {
-        "local": "Aldosivi",
-        "visitante": "Banfield",
-        "arbitro": -1
-      },
-      {
-        "local": "Argentinos Juniors",
+        "local": "Patronato",
         "visitante": "San Lorenzo",
         "arbitro": -1
       },
       {
-        "local": "Talleres",
+        "local": "Vélez",
+        "visitante": "Godoy Cruz",
+        "arbitro": -1
+      },
+      {
+        "local": "Banfield",
         "visitante": "Central Córdoba",
         "arbitro": -1
       },
       {
-        "local": "Rosario Central",
-        "visitante": "Platence",
+        "local": "Gimnasia",
+        "visitante": "Aldosivi",
         "arbitro": -1
       },
       {
-        "local": "River Plate",
+        "local": "Platence",
+        "visitante": "Huracán",
+        "arbitro": -1
+      },
+      {
+        "local": "Argentinos Juniors",
         "visitante": "Unión",
         "arbitro": -1
       },
@@ -37,92 +42,117 @@
         "arbitro": -1
       },
       {
-        "local": "Huracán",
-        "visitante": "Patronato",
+        "local": "Colón",
+        "visitante": "River Plate",
         "arbitro": -1
       },
       {
-        "local": "Arsenal",
-        "visitante": "Independiente",
+        "local": "Independiente",
+        "visitante": "Talleres",
         "arbitro": -1
       },
       {
         "local": "Estudiantes",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Gimnasia",
-        "visitante": "Vélez",
+        "visitante": "Arsenal",
         "arbitro": -1
       }
     ],
     "1": [
       {
-        "local": "Gimnasia",
-        "visitante": "Racing",
+        "local": "Colón",
+        "visitante": "River Plate",
         "arbitro": -1
       },
       {
-        "local": "Argentinos Juniors",
-        "visitante": "Godoy Cruz",
-        "arbitro": -1
-      },
-      {
-        "local": "Unión",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Estudiantes",
-        "visitante": "San Lorenzo",
-        "arbitro": -1
-      },
-      {
-        "local": "Rosario Central",
+        "local": "Arsenal",
         "visitante": "Independiente",
         "arbitro": -1
       },
       {
-        "local": "Vélez",
-        "visitante": "Banfield",
-        "arbitro": -1
-      },
-      {
-        "local": "Boca Juniors",
+        "local": "Patronato",
         "visitante": "Central Córdoba",
         "arbitro": -1
       },
       {
-        "local": "River Plate",
+        "local": "Platence",
+        "visitante": "Vélez",
+        "arbitro": -1
+      },
+      {
+        "local": "Talleres",
+        "visitante": "San Lorenzo",
+        "arbitro": -1
+      },
+      {
+        "local": "Godoy Cruz",
         "visitante": "Aldosivi",
         "arbitro": -1
       },
       {
-        "local": "Platence",
-        "visitante": "Talleres",
+        "local": "Banfield",
+        "visitante": "Unión",
         "arbitro": -1
       },
       {
-        "local": "Colón",
-        "visitante": "Huracán",
+        "local": "Gimnasia",
+        "visitante": "Argentinos Juniors",
         "arbitro": -1
       },
       {
-        "local": "Patronato",
-        "visitante": "Arsenal",
+        "local": "Rosario Central",
+        "visitante": "Estudiantes",
+        "arbitro": -1
+      },
+      {
+        "local": "Huracán",
+        "visitante": "Boca Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Newell\u0027s",
+        "visitante": "Racing",
         "arbitro": -1
       }
     ],
     "2": [
       {
-        "local": "Boca Juniors",
-        "visitante": "Platence",
+        "local": "Colón",
+        "visitante": "Gimnasia",
+        "arbitro": -1
+      },
+      {
+        "local": "Talleres",
+        "visitante": "Newell\u0027s",
+        "arbitro": -1
+      },
+      {
+        "local": "Independiente",
+        "visitante": "Arsenal",
+        "arbitro": -1
+      },
+      {
+        "local": "Patronato",
+        "visitante": "Huracán",
         "arbitro": -1
       },
       {
         "local": "Racing",
-        "visitante": "Central Córdoba",
+        "visitante": "Banfield",
+        "arbitro": -1
+      },
+      {
+        "local": "Godoy Cruz",
+        "visitante": "Unión",
+        "arbitro": -1
+      },
+      {
+        "local": "Central Córdoba",
+        "visitante": "Boca Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Estudiantes",
+        "visitante": "Rosario Central",
         "arbitro": -1
       },
       {
@@ -131,194 +161,102 @@
         "arbitro": -1
       },
       {
-        "local": "Godoy Cruz",
-        "visitante": "Patronato",
-        "arbitro": -1
-      },
-      {
-        "local": "Colón",
-        "visitante": "Arsenal",
-        "arbitro": -1
-      },
-      {
-        "local": "Banfield",
-        "visitante": "Rosario Central",
-        "arbitro": -1
-      },
-      {
-        "local": "Talleres",
-        "visitante": "Estudiantes",
-        "arbitro": -1
-      },
-      {
-        "local": "Gimnasia",
-        "visitante": "Unión",
-        "arbitro": -1
-      },
-      {
         "local": "River Plate",
-        "visitante": "Huracán",
-        "arbitro": -1
-      },
-      {
-        "local": "Independiente",
-        "visitante": "San Lorenzo",
+        "visitante": "Platence",
         "arbitro": -1
       },
       {
         "local": "Vélez",
-        "visitante": "Newell\u0027s",
+        "visitante": "San Lorenzo",
         "arbitro": -1
       }
     ],
     "3": [
       {
-        "local": "Platence",
-        "visitante": "Vélez",
+        "local": "Argentinos Juniors",
+        "visitante": "Colón",
         "arbitro": -1
       },
       {
         "local": "Unión",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Boca Juniors",
-        "visitante": "Banfield",
-        "arbitro": -1
-      },
-      {
-        "local": "Central Córdoba",
-        "visitante": "Argentinos Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "San Lorenzo",
-        "visitante": "Gimnasia",
-        "arbitro": -1
-      },
-      {
-        "local": "Huracán",
-        "visitante": "Racing",
-        "arbitro": -1
-      },
-      {
-        "local": "Independiente",
         "visitante": "Estudiantes",
         "arbitro": -1
       },
       {
-        "local": "Aldosivi",
-        "visitante": "Godoy Cruz",
+        "local": "Independiente",
+        "visitante": "Gimnasia",
         "arbitro": -1
       },
       {
-        "local": "Patronato",
-        "visitante": "Talleres",
+        "local": "Boca Juniors",
+        "visitante": "Platence",
         "arbitro": -1
       },
       {
         "local": "River Plate",
-        "visitante": "Arsenal",
+        "visitante": "Vélez",
         "arbitro": -1
       },
       {
-        "local": "Colón",
+        "local": "Patronato",
+        "visitante": "Huracán",
+        "arbitro": -1
+      },
+      {
+        "local": "Newell\u0027s",
         "visitante": "Rosario Central",
+        "arbitro": -1
+      },
+      {
+        "local": "Godoy Cruz",
+        "visitante": "Banfield",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "Aldosivi",
+        "arbitro": -1
+      },
+      {
+        "local": "Talleres",
+        "visitante": "Central Córdoba",
+        "arbitro": -1
+      },
+      {
+        "local": "San Lorenzo",
+        "visitante": "Racing",
         "arbitro": -1
       }
     ],
     "4": [
       {
-        "local": "Arsenal",
-        "visitante": "Aldosivi",
-        "arbitro": -1
-      },
-      {
-        "local": "Banfield",
-        "visitante": "Boca Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Unión",
-        "visitante": "Independiente",
-        "arbitro": -1
-      },
-      {
-        "local": "River Plate",
-        "visitante": "Colón",
-        "arbitro": -1
-      },
-      {
-        "local": "Argentinos Juniors",
-        "visitante": "Estudiantes",
-        "arbitro": -1
-      },
-      {
-        "local": "Platence",
-        "visitante": "Vélez",
+        "local": "Rosario Central",
+        "visitante": "Argentinos Juniors",
         "arbitro": -1
       },
       {
         "local": "Talleres",
-        "visitante": "Gimnasia",
+        "visitante": "San Lorenzo",
         "arbitro": -1
       },
       {
-        "local": "San Lorenzo",
+        "local": "Gimnasia",
+        "visitante": "Colón",
+        "arbitro": -1
+      },
+      {
+        "local": "Vélez",
         "visitante": "Godoy Cruz",
         "arbitro": -1
       },
       {
         "local": "Central Córdoba",
+        "visitante": "River Plate",
+        "arbitro": -1
+      },
+      {
+        "local": "Unión",
         "visitante": "Patronato",
-        "arbitro": -1
-      },
-      {
-        "local": "Racing",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Rosario Central",
-        "visitante": "Huracán",
-        "arbitro": -1
-      }
-    ],
-    "5": [
-      {
-        "local": "Huracán",
-        "visitante": "Argentinos Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "River Plate",
-        "visitante": "Gimnasia",
-        "arbitro": -1
-      },
-      {
-        "local": "Central Córdoba",
-        "visitante": "Boca Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Rosario Central",
-        "visitante": "Talleres",
-        "arbitro": -1
-      },
-      {
-        "local": "Arsenal",
-        "visitante": "Platence",
-        "arbitro": -1
-      },
-      {
-        "local": "San Lorenzo",
-        "visitante": "Vélez",
-        "arbitro": -1
-      },
-      {
-        "local": "Aldosivi",
-        "visitante": "Estudiantes",
         "arbitro": -1
       },
       {
@@ -328,137 +266,152 @@
       },
       {
         "local": "Independiente",
+        "visitante": "Huracán",
+        "arbitro": -1
+      },
+      {
+        "local": "Aldosivi",
+        "visitante": "Boca Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "Estudiantes",
+        "arbitro": -1
+      },
+      {
+        "local": "Platence",
+        "visitante": "Racing",
+        "arbitro": -1
+      }
+    ],
+    "5": [
+      {
+        "local": "Independiente",
+        "visitante": "Talleres",
+        "arbitro": -1
+      },
+      {
+        "local": "Newell\u0027s",
+        "visitante": "Vélez",
+        "arbitro": -1
+      },
+      {
+        "local": "Estudiantes",
         "visitante": "Colón",
         "arbitro": -1
       },
       {
-        "local": "Racing",
+        "local": "Argentinos Juniors",
+        "visitante": "River Plate",
+        "arbitro": -1
+      },
+      {
+        "local": "Patronato",
+        "visitante": "Huracán",
+        "arbitro": -1
+      },
+      {
+        "local": "Boca Juniors",
         "visitante": "Unión",
         "arbitro": -1
       },
       {
-        "local": "Godoy Cruz",
-        "visitante": "Patronato",
+        "local": "Gimnasia",
+        "visitante": "Arsenal",
+        "arbitro": -1
+      },
+      {
+        "local": "Rosario Central",
+        "visitante": "Platence",
+        "arbitro": -1
+      },
+      {
+        "local": "Central Córdoba",
+        "visitante": "Banfield",
+        "arbitro": -1
+      },
+      {
+        "local": "San Lorenzo",
+        "visitante": "Racing",
+        "arbitro": -1
+      },
+      {
+        "local": "Aldosivi",
+        "visitante": "Godoy Cruz",
         "arbitro": -1
       }
     ],
     "6": [
       {
-        "local": "Godoy Cruz",
-        "visitante": "Gimnasia",
-        "arbitro": -1
-      },
-      {
-        "local": "Patronato",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Racing",
-        "visitante": "Talleres",
-        "arbitro": -1
-      },
-      {
-        "local": "River Plate",
-        "visitante": "Arsenal",
-        "arbitro": -1
-      },
-      {
-        "local": "Estudiantes",
-        "visitante": "Huracán",
-        "arbitro": -1
-      },
-      {
-        "local": "Argentinos Juniors",
-        "visitante": "Aldosivi",
-        "arbitro": -1
-      },
-      {
-        "local": "Platence",
-        "visitante": "San Lorenzo",
-        "arbitro": -1
-      },
-      {
-        "local": "Vélez",
-        "visitante": "Rosario Central",
-        "arbitro": -1
-      },
-      {
-        "local": "Boca Juniors",
-        "visitante": "Unión",
+        "local": "Unión",
+        "visitante": "Argentinos Juniors",
         "arbitro": -1
       },
       {
         "local": "Colón",
-        "visitante": "Independiente",
+        "visitante": "Newell\u0027s",
         "arbitro": -1
       },
       {
-        "local": "Central Córdoba",
-        "visitante": "Banfield",
+        "local": "Godoy Cruz",
+        "visitante": "Vélez",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "River Plate",
+        "arbitro": -1
+      },
+      {
+        "local": "Patronato",
+        "visitante": "Gimnasia",
+        "arbitro": -1
+      },
+      {
+        "local": "Aldosivi",
+        "visitante": "Talleres",
+        "arbitro": -1
+      },
+      {
+        "local": "Banfield",
+        "visitante": "Central Córdoba",
+        "arbitro": -1
+      },
+      {
+        "local": "Platence",
+        "visitante": "Huracán",
+        "arbitro": -1
+      },
+      {
+        "local": "Rosario Central",
+        "visitante": "Racing",
+        "arbitro": -1
+      },
+      {
+        "local": "Estudiantes",
+        "visitante": "San Lorenzo",
+        "arbitro": -1
+      },
+      {
+        "local": "Boca Juniors",
+        "visitante": "Independiente",
         "arbitro": -1
       }
     ],
     "7": [
       {
-        "local": "Independiente",
-        "visitante": "Gimnasia",
-        "arbitro": -1
-      },
-      {
-        "local": "Patronato",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
         "local": "Godoy Cruz",
-        "visitante": "Rosario Central",
+        "visitante": "Estudiantes",
         "arbitro": -1
       },
       {
-        "local": "Banfield",
-        "visitante": "Colón",
-        "arbitro": -1
-      },
-      {
-        "local": "Huracán",
-        "visitante": "Talleres",
-        "arbitro": -1
-      },
-      {
-        "local": "Unión",
-        "visitante": "San Lorenzo",
-        "arbitro": -1
-      },
-      {
-        "local": "Central Córdoba",
+        "local": "Rosario Central",
         "visitante": "Arsenal",
         "arbitro": -1
       },
       {
-        "local": "River Plate",
-        "visitante": "Boca Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Estudiantes",
-        "visitante": "Argentinos Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Racing",
-        "visitante": "Aldosivi",
-        "arbitro": -1
-      },
-      {
-        "local": "Platence",
-        "visitante": "Vélez",
-        "arbitro": -1
-      }
-    ],
-    "8": [
-      {
-        "local": "San Lorenzo",
+        "local": "Newell\u0027s",
         "visitante": "Independiente",
         "arbitro": -1
       },
@@ -468,204 +421,13 @@
         "arbitro": -1
       },
       {
-        "local": "Racing",
-        "visitante": "Arsenal",
-        "arbitro": -1
-      },
-      {
-        "local": "Central Córdoba",
-        "visitante": "Talleres",
-        "arbitro": -1
-      },
-      {
-        "local": "Estudiantes",
-        "visitante": "Boca Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Platence",
-        "visitante": "Godoy Cruz",
-        "arbitro": -1
-      },
-      {
-        "local": "Rosario Central",
-        "visitante": "Vélez",
-        "arbitro": -1
-      },
-      {
-        "local": "Patronato",
-        "visitante": "Banfield",
-        "arbitro": -1
-      },
-      {
-        "local": "Argentinos Juniors",
-        "visitante": "Aldosivi",
-        "arbitro": -1
-      },
-      {
-        "local": "Unión",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Gimnasia",
-        "visitante": "Huracán",
-        "arbitro": -1
-      }
-    ],
-    "9": [
-      {
-        "local": "Patronato",
-        "visitante": "River Plate",
-        "arbitro": -1
-      },
-      {
-        "local": "Unión",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Huracán",
-        "visitante": "Argentinos Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Central Córdoba",
-        "visitante": "Aldosivi",
-        "arbitro": -1
-      },
-      {
-        "local": "Vélez",
-        "visitante": "Colón",
-        "arbitro": -1
-      },
-      {
-        "local": "Independiente",
-        "visitante": "San Lorenzo",
-        "arbitro": -1
-      },
-      {
-        "local": "Racing",
-        "visitante": "Arsenal",
-        "arbitro": -1
-      },
-      {
-        "local": "Boca Juniors",
-        "visitante": "Platence",
-        "arbitro": -1
-      },
-      {
-        "local": "Banfield",
-        "visitante": "Gimnasia",
-        "arbitro": -1
-      },
-      {
-        "local": "Rosario Central",
-        "visitante": "Godoy Cruz",
-        "arbitro": -1
-      },
-      {
-        "local": "Talleres",
-        "visitante": "Estudiantes",
-        "arbitro": -1
-      }
-    ],
-    "10": [
-      {
-        "local": "Central Córdoba",
-        "visitante": "Aldosivi",
-        "arbitro": -1
-      },
-      {
-        "local": "Rosario Central",
-        "visitante": "River Plate",
-        "arbitro": -1
-      },
-      {
-        "local": "Gimnasia",
-        "visitante": "Newell\u0027s",
-        "arbitro": -1
-      },
-      {
-        "local": "Argentinos Juniors",
-        "visitante": "Colón",
-        "arbitro": -1
-      },
-      {
         "local": "San Lorenzo",
-        "visitante": "Arsenal",
-        "arbitro": -1
-      },
-      {
-        "local": "Godoy Cruz",
-        "visitante": "Talleres",
-        "arbitro": -1
-      },
-      {
-        "local": "Banfield",
-        "visitante": "Unión",
-        "arbitro": -1
-      },
-      {
-        "local": "Patronato",
-        "visitante": "Vélez",
-        "arbitro": -1
-      },
-      {
-        "local": "Racing",
         "visitante": "Boca Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Estudiantes",
-        "visitante": "Huracán",
-        "arbitro": -1
-      },
-      {
-        "local": "Independiente",
-        "visitante": "Platence",
-        "arbitro": -1
-      }
-    ],
-    "11": [
-      {
-        "local": "Banfield",
-        "visitante": "Argentinos Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "River Plate",
-        "visitante": "Talleres",
-        "arbitro": -1
-      },
-      {
-        "local": "Unión",
-        "visitante": "San Lorenzo",
-        "arbitro": -1
-      },
-      {
-        "local": "Huracán",
-        "visitante": "Rosario Central",
-        "arbitro": -1
-      },
-      {
-        "local": "Independiente",
-        "visitante": "Boca Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Godoy Cruz",
-        "visitante": "Colón",
-        "arbitro": -1
-      },
-      {
-        "local": "Arsenal",
-        "visitante": "Patronato",
         "arbitro": -1
       },
       {
         "local": "Vélez",
-        "visitante": "Newell\u0027s",
+        "visitante": "Unión",
         "arbitro": -1
       },
       {
@@ -674,70 +436,308 @@
         "arbitro": -1
       },
       {
+        "local": "Huracán",
+        "visitante": "Argentinos Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Patronato",
+        "visitante": "Talleres",
+        "arbitro": -1
+      },
+      {
+        "local": "Banfield",
+        "visitante": "Platence",
+        "arbitro": -1
+      },
+      {
         "local": "Central Córdoba",
+        "visitante": "Gimnasia",
+        "arbitro": -1
+      }
+    ],
+    "8": [
+      {
+        "local": "Central Córdoba",
+        "visitante": "Banfield",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
         "visitante": "Gimnasia",
         "arbitro": -1
       },
       {
-        "local": "Platence",
-        "visitante": "Estudiantes",
+        "local": "Godoy Cruz",
+        "visitante": "Vélez",
+        "arbitro": -1
+      },
+      {
+        "local": "Rosario Central",
+        "visitante": "Unión",
+        "arbitro": -1
+      },
+      {
+        "local": "Estudiantes",
+        "visitante": "Patronato",
+        "arbitro": -1
+      },
+      {
+        "local": "Talleres",
+        "visitante": "Boca Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Racing",
+        "visitante": "Independiente",
+        "arbitro": -1
+      },
+      {
+        "local": "Newell\u0027s",
+        "visitante": "Colón",
+        "arbitro": -1
+      },
+      {
+        "local": "Huracán",
+        "visitante": "San Lorenzo",
+        "arbitro": -1
+      },
+      {
+        "local": "River Plate",
+        "visitante": "Platence",
+        "arbitro": -1
+      },
+      {
+        "local": "Aldosivi",
+        "visitante": "Argentinos Juniors",
         "arbitro": -1
       }
     ],
-    "12": [
+    "9": [
+      {
+        "local": "Estudiantes",
+        "visitante": "Platence",
+        "arbitro": -1
+      },
+      {
+        "local": "Vélez",
+        "visitante": "San Lorenzo",
+        "arbitro": -1
+      },
+      {
+        "local": "Godoy Cruz",
+        "visitante": "Argentinos Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "River Plate",
+        "visitante": "Central Córdoba",
+        "arbitro": -1
+      },
+      {
+        "local": "Huracán",
+        "visitante": "Colón",
+        "arbitro": -1
+      },
+      {
+        "local": "Gimnasia",
+        "visitante": "Banfield",
+        "arbitro": -1
+      },
+      {
+        "local": "Newell\u0027s",
+        "visitante": "Patronato",
+        "arbitro": -1
+      },
+      {
+        "local": "Talleres",
+        "visitante": "Boca Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Racing",
+        "visitante": "Rosario Central",
+        "arbitro": -1
+      },
+      {
+        "local": "Unión",
+        "visitante": "Aldosivi",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "Independiente",
+        "arbitro": -1
+      }
+    ],
+    "10": [
+      {
+        "local": "Godoy Cruz",
+        "visitante": "Vélez",
+        "arbitro": -1
+      },
+      {
+        "local": "Racing",
+        "visitante": "Estudiantes",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "Banfield",
+        "arbitro": -1
+      },
+      {
+        "local": "San Lorenzo",
+        "visitante": "Gimnasia",
+        "arbitro": -1
+      },
+      {
+        "local": "Boca Juniors",
+        "visitante": "Huracán",
+        "arbitro": -1
+      },
+      {
+        "local": "Talleres",
+        "visitante": "Newell\u0027s",
+        "arbitro": -1
+      },
       {
         "local": "Central Córdoba",
         "visitante": "River Plate",
         "arbitro": -1
       },
       {
-        "local": "Huracán",
-        "visitante": "Patronato",
+        "local": "Aldosivi",
+        "visitante": "Colón",
         "arbitro": -1
       },
       {
-        "local": "Godoy Cruz",
-        "visitante": "San Lorenzo",
-        "arbitro": -1
-      },
-      {
-        "local": "Gimnasia",
+        "local": "Argentinos Juniors",
         "visitante": "Unión",
         "arbitro": -1
       },
       {
-        "local": "Racing",
-        "visitante": "Talleres",
-        "arbitro": -1
-      },
-      {
-        "local": "Independiente",
-        "visitante": "Boca Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Vélez",
-        "visitante": "Arsenal",
-        "arbitro": -1
-      },
-      {
-        "local": "Newell\u0027s",
-        "visitante": "Argentinos Juniors",
-        "arbitro": -1
-      },
-      {
-        "local": "Colón",
+        "local": "Patronato",
         "visitante": "Rosario Central",
         "arbitro": -1
       },
+      {
+        "local": "Platence",
+        "visitante": "Independiente",
+        "arbitro": -1
+      }
+    ],
+    "11": [
       {
         "local": "Aldosivi",
         "visitante": "Estudiantes",
         "arbitro": -1
       },
       {
+        "local": "Platence",
+        "visitante": "Vélez",
+        "arbitro": -1
+      },
+      {
+        "local": "Talleres",
+        "visitante": "Independiente",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "Racing",
+        "arbitro": -1
+      },
+      {
+        "local": "Gimnasia",
+        "visitante": "San Lorenzo",
+        "arbitro": -1
+      },
+      {
+        "local": "Rosario Central",
+        "visitante": "Newell\u0027s",
+        "arbitro": -1
+      },
+      {
+        "local": "Huracán",
+        "visitante": "River Plate",
+        "arbitro": -1
+      },
+      {
         "local": "Banfield",
-        "visitante": "Platence",
+        "visitante": "Colón",
+        "arbitro": -1
+      },
+      {
+        "local": "Central Córdoba",
+        "visitante": "Argentinos Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Patronato",
+        "visitante": "Unión",
+        "arbitro": -1
+      },
+      {
+        "local": "Boca Juniors",
+        "visitante": "Godoy Cruz",
+        "arbitro": -1
+      }
+    ],
+    "12": [
+      {
+        "local": "Platence",
+        "visitante": "Banfield",
+        "arbitro": -1
+      },
+      {
+        "local": "Independiente",
+        "visitante": "San Lorenzo",
+        "arbitro": -1
+      },
+      {
+        "local": "River Plate",
+        "visitante": "Estudiantes",
+        "arbitro": -1
+      },
+      {
+        "local": "Newell\u0027s",
+        "visitante": "Talleres",
+        "arbitro": -1
+      },
+      {
+        "local": "Gimnasia",
+        "visitante": "Racing",
+        "arbitro": -1
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "Argentinos Juniors",
+        "arbitro": -1
+      },
+      {
+        "local": "Boca Juniors",
+        "visitante": "Patronato",
+        "arbitro": -1
+      },
+      {
+        "local": "Colón",
+        "visitante": "Huracán",
+        "arbitro": -1
+      },
+      {
+        "local": "Godoy Cruz",
+        "visitante": "Vélez",
+        "arbitro": -1
+      },
+      {
+        "local": "Aldosivi",
+        "visitante": "Central Córdoba",
+        "arbitro": -1
+      },
+      {
+        "local": "Unión",
+        "visitante": "Rosario Central",
         "arbitro": -1
       }
     ]

@@ -33,14 +33,14 @@ public class AlgoritmoGolosoMainTest {
 	
 	@Test(expected = RuntimeException.class)
 	public void generarAlgoritmoGoloso_fechasNull_expetion() {
-		algoritmoGolosoMain.generarAlgoritmoGoloso(null, -1);
+		//algoritmoGolosoMain.generarAlgoritmoGoloso(null, -1);
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void generarAlgoritmoGoloso_fechasEmpty_expetion() {
 		HashMap<Integer, ArrayList<Partido>> fechas = algoritmoGolosoMain.getFechas();
 		fechas.clear();
-		algoritmoGolosoMain.generarAlgoritmoGoloso(fechas, -1);
+		//algoritmoGolosoMain.generarAlgoritmoGoloso(fechas, -1);
 	}
 	
 	@Test(expected = RuntimeException.class)
