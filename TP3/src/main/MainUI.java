@@ -170,10 +170,13 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 		
 		new Thread() {
 			    public void run() {
-					HashMap<Integer, ArrayList<Partido>> fechas = golosoMain.getFechas();
-					resetUIAlgoritmoGoloso();
-					fechas = golosoMain.generarAlgoritmoGoloso(fechas, cantidadArbitrosPorDefecto);
-					golosoMain.colocarDatosDeAlgoritmoGolosoUI(fechas);
+					resetUIAlgoritmoGoloso();  
+					golosoMain.resetArbitros();
+					golosoMain.colocarDatosDeAlgoritmoGolosoUI(
+						golosoMain.generarAlgoritmoGoloso(
+							  golosoMain.getFechas(),
+							  cantidadArbitrosPorDefecto)
+							);
 			    };
 		 }.start();
 		 
@@ -289,11 +292,7 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 					panelAlgoritmoGoloso.add(partidoLabel);
 					panelAlgoritmoGoloso.add(arbitro);
 					espacioLabelPartidos += 17;
-					
-					// ver boton
-					JButton resaltarEquipo = new JButton("ver");
-					resaltarEquipo.setBounds(arbitro.getBounds().x+arbitro.getBounds().width, arbitro.getBounds().y, 60, 14);
-					panelAlgoritmoGoloso.add(resaltarEquipo);
+				
 				}
 				datosGeneradosGolosoY = espacioLabelPartidos;
 				

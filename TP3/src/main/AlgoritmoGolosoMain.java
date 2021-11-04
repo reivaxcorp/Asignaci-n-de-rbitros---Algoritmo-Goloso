@@ -31,14 +31,14 @@ public class AlgoritmoGolosoMain {
 		
 		HashMap<Integer, ArrayList<Partido>> pFechas = fechas;
 
-		if (fechas != null && !fechas.isEmpty()) {
+		if (pFechas != null && !pFechas.isEmpty()) {
 	
 		
 			for (int fecha = 0; fecha < pFechas.size(); fecha++) {
 				for (int partido = 0; partido < fechas.get(fecha).size(); partido++) {	
 					
 					Partido p =  pFechas.get(fecha).get(partido);
-					p.setArbitro(asignarArbitro(pFechas, p, cantidadArbitros));
+					p.setArbitro(asignarArbitro(pFechas, p, cantidadArbitros, fecha));
 					
 				}
 			}
@@ -49,12 +49,86 @@ public class AlgoritmoGolosoMain {
 		return pFechas;
 	}
 	
+	private int obtenerArbitroSiguiente(HashMap<Integer, ArrayList<Partido>> pFechas, Partido mPartido, int cantArbitros, int fechaActual) {
+		
+		ArrayList<Integer> arbitrosYaSeleccionadoPorFecha = new ArrayList<Integer>();
+	
+		for(Partido p : pFechas.get(fechaActual)) {
+			if(p.getArbitro() != -1) {
+			  arbitrosYaSeleccionadoPorFecha.add(p.getArbitro());
+			}
+		}
+		
+		for( int arbitrosDisponible = 1; arbitrosDisponible <= cantArbitros; arbitrosDisponible ++) {
+			
+			if(!(arbitrosYaSeleccionadoPorFecha.contains(arbitrosDisponible)))
+				return arbitrosDisponible;
+		}
+		
+		return 1;
+	}
+	
+	public int asignarArbitro(HashMap<Integer, ArrayList<Partido>> pFechas, Partido mPartido, int cantArbitros, int fechaActual) {
+		
+		// buscar todos los partidos en todas las fechas de los dos equipos del partido. OK
+		ArrayList<Partido> equipoLocal = obtenerPartidosEquipo(mPartido.getLocal(), pFechas); // cant. veces equipo local
+		ArrayList<Partido> equipoVisitante = obtenerPartidosEquipo(mPartido.getVisitante(), pFechas);; // cant. veces equipo visitante
+		// busca todos los partidos entre ellos, cantidad de veces que juegan juntos en cada fecha
+		ArrayList<Partido> encuentros = obtenerEncuentros(mPartido, pFechas); 
+
+
+		// buscar la cantidad de veces que los arbitros aparecen en cada equipo . OK
+
+		// key arbitro, value cantidad de veces. 
+		HashMap<Integer, Integer> cantVecesArbitroEquipoLocal = obtenerArbitrosEquipo(cantArbitros, equipoLocal); 
+
+		// key arbitro, value cantidad de veces. 
+		HashMap<Integer, Integer> cantVecesArbitroEquipoVisitante = obtenerArbitrosEquipo(cantArbitros, equipoVisitante); 
+
+	
+		//  fecha 1
+		if(cantVecesArbitroEquipoVisitante.isEmpty() && cantVecesArbitroEquipoLocal.isEmpty()) {
+			
+			return obtenerArbitroSiguiente(pFechas, mPartido, cantArbitros, fechaActual);
+			//return arbitroAleatorio(cantArbitros);
+	
+		} else {
+
+			// buscar todos los arbitros de los dos equipos <= Mi partido. OK
+			HashMap<Integer, Integer> menoresLocalMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoLocal);
+			HashMap<Integer, Integer> menoresVisitanteMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoVisitante);
+
+			if(!menoresLocalMi.isEmpty() && !menoresVisitanteMi.isEmpty()) {
+			
+				return obtenerArbitroCoincidentePartidos(cantArbitros, menoresLocalMi, menoresVisitanteMi);
+
+			} else if(menoresLocalMi.isEmpty() && menoresVisitanteMi.isEmpty()) {
+
+				// los dos equipos superaron superaron Mi
+				return arbitroAleatorio(cantArbitros);
+				
+			} else if(menoresLocalMi.isEmpty() && !menoresVisitanteMi.isEmpty()) {
+
+				return obtenerArbitroEquilibrado(menoresVisitanteMi);
+				
+			} else {
+				
+				return obtenerArbitroEquilibrado(menoresLocalMi);
+			
+			}
+
+		}
+
+
+	}
+	
+	
 	private ArrayList<Partido> obtenerPartidosEquipo(String nombreEquipo, HashMap<Integer, ArrayList<Partido>> pFechas) {
 		
 		ArrayList<Partido> partidos = new ArrayList<Partido>();
 		
 		for (int fecha = 0; fecha < pFechas.size(); fecha++) {
-			for (int partido = 0; partido < fechas.get(fecha).size(); partido++) {
+			for (int partido = 0; partido < getFechas().get(fecha).size(); partido++) {
 				
 				String equipoVisitante = pFechas.get(fecha).get(partido).getVisitante();
 				String equipoLocal = pFechas.get(fecha).get(partido).getLocal();
@@ -71,7 +145,7 @@ public class AlgoritmoGolosoMain {
     	ArrayList<Partido> encuentros = new ArrayList<Partido>();
     	
     	for (int fecha = 0; fecha < pFechas.size(); fecha++) {
-			for (int partido = 0; partido < fechas.get(fecha).size(); partido++) {
+			for (int partido = 0; partido < getFechas().get(fecha).size(); partido++) {
 				
 				String equipoVisitante = pFechas.get(fecha).get(partido).getVisitante();
 				String equipoLocal = pFechas.get(fecha).get(partido).getLocal();
@@ -117,6 +191,8 @@ public class AlgoritmoGolosoMain {
     	return menoresMi;
     }
     
+    // cantidad de veces que los dos arbitros dirigieron al mismo equipo
+    // debemos buscar el arbitro que menos haya dirigido el partido en el encuentro actual
     private int obtenerArbitroCoincidentePartidos(
     		int cantArbitros,
     		HashMap<Integer, Integer> menoresLocalMi,
@@ -178,65 +254,7 @@ public class AlgoritmoGolosoMain {
 		return arbitrosList.get(arbitroRandom);
     }
     
-	public int asignarArbitro(HashMap<Integer, ArrayList<Partido>> pFechas, Partido mPartido, int cantArbitros) {
-		
-		// buscar todos los partidos en todas las fechas de los dos equipos del partido. OK
-		ArrayList<Partido> equipoLocal = obtenerPartidosEquipo(mPartido.getLocal(), pFechas); // cant. veces equipo local
-		ArrayList<Partido> equipoVisitante = obtenerPartidosEquipo(mPartido.getVisitante(), pFechas);; // cant. veces equipo visitante
-		// busca todos los partidos entre ellos, cantidad de veces que juegan juntos en cada fecha
-		ArrayList<Partido> encuentros = obtenerEncuentros(mPartido, pFechas); 
 
-
-		// buscar la cantidad de veces que los arbitros aparecen en cada equipo . OK
-
-		// key arbitro, value cantidad de veces. 
-		HashMap<Integer, Integer> cantVecesArbitroEquipoLocal = obtenerArbitrosEquipo(cantArbitros, equipoLocal); 
-
-		// key arbitro, value cantidad de veces. 
-		HashMap<Integer, Integer> cantVecesArbitroEquipoVisitante = obtenerArbitrosEquipo(cantArbitros, equipoVisitante); 
-
-	
-		//  fecha 1
-		if(cantVecesArbitroEquipoVisitante.isEmpty() && cantVecesArbitroEquipoLocal.isEmpty()) {
-			
-			return arbitroAleatorio(cantArbitros);
-	
-		} else {
-
-			// buscar todos los arbitros de los dos equipos <= Mi partido. OK
-			HashMap<Integer, Integer> menoresLocalMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoLocal);
-			HashMap<Integer, Integer> menoresVisitanteMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoVisitante);
-
-			if(!menoresLocalMi.isEmpty() && !menoresVisitanteMi.isEmpty()) {
-			
-				return obtenerArbitroCoincidentePartidos(cantArbitros, menoresLocalMi, menoresVisitanteMi);
-
-			} else if(menoresLocalMi.isEmpty() && menoresVisitanteMi.isEmpty()) {
-
-				// los dos equipos superaron superaron Mi
-				return arbitroAleatorio(cantArbitros);
-				
-			} else if(menoresLocalMi.isEmpty() && !menoresVisitanteMi.isEmpty()) {
-
-				return obtenerArbitroEquilibrado(menoresVisitanteMi);
-				
-			} else {
-				
-				return obtenerArbitroEquilibrado(menoresLocalMi);
-			
-			}
-
-		}
-
-
-	}
-
-	private int arbitroAleatorio(int cantArbitros) {
-		int arbitroRandom = rn.nextInt(cantArbitros);
-		return arbitroRandom +1;
-	}
-
-	
 	// un arbitro por partido
 	public HashMap<String, ArrayList<Integer>> crearListaArbitrosPorFecha(HashMap<Integer, ArrayList<Partido>> fechas) {
 		HashMap<String, ArrayList<Integer>> arbitros
@@ -271,6 +289,19 @@ public class AlgoritmoGolosoMain {
 		}
 	}
 
+
+	private int arbitroAleatorio(int cantArbitros) {
+		int arbitroRandom = rn.nextInt(cantArbitros);
+		return arbitroRandom +1;
+	}
+
+	public void resetArbitros() {
+		for(int f: fechas.keySet()) {
+			for(Partido p: fechas.get(f))
+				p.setArbitro(-1);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public HashMap<Integer, ArrayList<Partido>> getFechas() {
 		return (HashMap<Integer, ArrayList<Partido>>) fechas.clone();
