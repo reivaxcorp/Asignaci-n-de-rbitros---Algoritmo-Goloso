@@ -6,7 +6,7 @@ import java.util.Random;
 public class FixtureGenerador {
 
 	private ArrayList<ArrayList<Partido>> fechas;
-	private int cantFechas = 13;
+	private int cantFechas = 22;
 	private int cantPartidosPorFecha = 0;
 
 	private Random seleccionAleatoria;
@@ -90,21 +90,10 @@ public class FixtureGenerador {
 	public ArrayList<String> obtenerEquiposDisponibles() {
 		return (ArrayList<String>) equiposDisponibles.clone();
 	}
-	
-	private void informacionUI() {
-		for(int fecha = 0; fecha <  fechas.size(); fecha ++) {
-			for(int partidos = 0; partidos <  cantPartidosPorFecha; partidos ++) {
-				System.out.println("fecha " +(fecha +1)+ "  "+ fechas.get(fecha).get(partidos).getLocal() + "  " +
-						fechas.get(fecha).get(partidos).getVisitante());
-				
-			}
-		}
-	}
 
 	private boolean existeEquipo(String equipo) {
 		return equiposDisponibles.contains(equipo);
 	}
-	
 	
 	public int getCantFechas() {
 		return cantFechas;

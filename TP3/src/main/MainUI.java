@@ -1,4 +1,6 @@
 package main;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -6,8 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
-
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
@@ -26,7 +26,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 
-public class MainUI extends JFrame implements onActualizaUI, KeyListener{
+public class MainUI extends JFrame implements KeyListener{
 
 	/**
 	 * 
@@ -37,8 +37,9 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 	private JPanel panelArchivoCargado;
 	private JPanel panelAlgoritmoGoloso;
 	private JScrollPane scrollPaneAlgoritmoGoloso;
+	private JScrollPane scrollPanelEstadisticas;
 	private JButton btnGenerarAlgoritmo;
-	private  Pattern pattern;
+	private  Pattern patternCantArbitros;
 	private final String EXTENCION = "json";
 	private final String NOMBRE_ARCHIVO_JSON = "fechas.json";
 	private int datosCargadosY = 10;
@@ -47,6 +48,10 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 	
 	private AlgoritmoGolosoMain golosoMain;
 	private JTextField cantidadArbitrostField;
+	private HashMap<Integer, ArrayList<Partido>> fechasUI;
+	
+	private ArrayList<Integer> partidoLabelIndex;
+	private int indexCountPartidoLabel;
 	/**
 	 * Launch the application.
 	 */
@@ -68,7 +73,7 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 	 */
 	public MainUI() {
 		
-		this.pattern = Pattern.compile("^[0]|\\D"); // true si es cero el primer caracter  y si no es un digito
+		this.patternCantArbitros = Pattern.compile("^[0]|\\D"); // true si es cero el primer caracter  y si no es un digito
 		 
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\reiva\\Desktop\\Programacion III\\TP3\\icon.png"));
 		setTitle("Generador de arbitros por equipos");
@@ -88,7 +93,7 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 				 mostrarResultadosAlgoritmoGoloso();
 			}
 		});
-		btnGenerarAlgoritmo.setBounds(311, 676, 89, 23);
+		btnGenerarAlgoritmo.setBounds(428, 0, 89, 23);
 		contentPane.add(btnGenerarAlgoritmo);
 		
 		JButton btnNewButton_1 = new JButton("Abrir Archivo");
@@ -98,7 +103,7 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 			}
 
 		});
-		btnNewButton_1.setBounds(24, 0, 190, 23);
+		btnNewButton_1.setBounds(0, 0, 190, 23);
 		contentPane.add(btnNewButton_1);
 		
 		scrollPaneArchivoCargado = new JScrollPane();
@@ -125,28 +130,33 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 		lblEquiposConArbitros.setBounds(465, 71, 221, 23);
 		contentPane.add(lblEquiposConArbitros);
 		
-		JButton btnGuardarArchivo = new JButton("Guardar Archivo");
-		btnGuardarArchivo.setBounds(224, 0, 190, 23);
-		contentPane.add(btnGuardarArchivo);
-		
 		cantidadArbitrostField = new JTextField();
 		cantidadArbitrostField.setColumns(1);
 		cantidadArbitrostField.addKeyListener(this);
 	
 		cantidadArbitrostField.setToolTipText("Cantidad de arbitros");
-		cantidadArbitrostField.setBounds(181, 677, 86, 20);
+		cantidadArbitrostField.setBounds(311, 1, 86, 20);
 		contentPane.add(cantidadArbitrostField);
 		cantidadArbitrostField.setText(Integer.toString(cantidadArbitrosPorDefecto));
 		
 		JLabel lblNewLabelCantidadArbitros = new JLabel("Cantidad Arbitros");
-		lblNewLabelCantidadArbitros.setBounds(67, 680, 104, 14);
+		lblNewLabelCantidadArbitros.setBounds(200, 4, 104, 14);
 		contentPane.add(lblNewLabelCantidadArbitros);
+		
+		scrollPanelEstadisticas = new JScrollPane();
+		scrollPanelEstadisticas.setWheelScrollingEnabled(true);
+		scrollPanelEstadisticas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPanelEstadisticas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPanelEstadisticas.setBounds(24, 662, 735, 88);
+		contentPane.add(scrollPanelEstadisticas);
 		
 		panelArchivoCargado = new JPanel();
 		panelArchivoCargado.setLayout(null);
 		
 		panelAlgoritmoGoloso = new JPanel();
 		panelAlgoritmoGoloso.setLayout(null);
+		
+		partidoLabelIndex = new ArrayList<Integer>();
 		
 		inicializarLogicaTP();
 		
@@ -155,7 +165,7 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 	 private void inicializarLogicaTP() {
 		 FixtureGenerador fix = new FixtureGenerador();
 		// Creamos archivo y fechas por defecto
-		 this.golosoMain = new AlgoritmoGolosoMain(this);
+		 this.golosoMain = new AlgoritmoGolosoMain();
 		 cargarDatosGuardados(fix);
 	}
 
@@ -163,20 +173,24 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 		  new ArchivoJSON(fix.obtenerFechas(), NOMBRE_ARCHIVO_JSON);
 		  File file = new File("./"+NOMBRE_ARCHIVO_JSON);
 		  this.golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
-		  this.golosoMain.colocarDatosDeArchivoUI(golosoMain.getFechas());
+		  colocarDatosDeArchivoUI(golosoMain.getFechas());
 	}
 	
 	private void mostrarResultadosAlgoritmoGoloso() {
 		
 		new Thread() {
 			    public void run() {
+			    	partidoLabelIndex.clear();
+					indexCountPartidoLabel = 0;
+					
 					resetUIAlgoritmoGoloso();  
 					golosoMain.resetArbitros();
-					golosoMain.colocarDatosDeAlgoritmoGolosoUI(
-						golosoMain.generarAlgoritmoGoloso(
-							  golosoMain.getFechas(),
-							  cantidadArbitrosPorDefecto)
-							);
+					
+					fechasUI = golosoMain.generarAlgoritmoGoloso(
+							   golosoMain.getFechas(),
+							   cantidadArbitrosPorDefecto);
+							
+					colocarDatosDeAlgoritmoGolosoUI(fechasUI);
 			    };
 		 }.start();
 		 
@@ -220,11 +234,10 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 			resetUIAlgoritmoGoloso();
             File file = fc.getSelectedFile();
             golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
-            golosoMain.colocarDatosDeArchivoUI(golosoMain.getFechas());
+            colocarDatosDeArchivoUI(golosoMain.getFechas());
         } 
 	}
 
-	@Override
 	public void colocarfechasDeArchivoUI(int fecha, ArrayList<Partido> partidos) {
 		// fecha
 		JLabel jlabel = new JLabel(
@@ -260,8 +273,10 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 	}
 	
 	
-	@Override
+	
 	public void colocarfechasAlgoritmoGoloso(int fecha, ArrayList<Partido> partidos) {
+		
+				
 				// fechas
 				JLabel jlabel = new JLabel(
 						"<html>" 
@@ -287,12 +302,10 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 							);
 					partidoLabel.setBounds(20, espacioLabelPartidos, 250, 14);
 					
-					
 					JLabel arbitro = new JLabel("<html><font color=\"blue\"> Arbitro: </font>"
 							+partidos.get(partido).getArbitro()
 							+"</html>");
 					arbitro.setBounds(partidoLabel.getBounds().x+partidoLabel.getBounds().width, partidoLabel.getBounds().y, 80, partidoLabel.getBounds().height);
-					
 					panelAlgoritmoGoloso.add(partidoLabel);
 					panelAlgoritmoGoloso.add(arbitro);
 					espacioLabelPartidos += 17;
@@ -305,13 +318,15 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
-						
-							resaltarEquipos(local, visitante);
+							resaltarEquipo(local);
+							mostrarEstadisticas(local);
 						}
 					});
 					
 					panelAlgoritmoGoloso.add(resaltarEquipo);
 					
+					partidoLabelIndex.add(indexCountPartidoLabel);
+					indexCountPartidoLabel ++;
 				}
 				datosGeneradosGolosoY = espacioLabelPartidos;
 				
@@ -321,9 +336,53 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 		
 	}
 	
-	protected void resaltarEquipos(String local, String visitante) {
-		// TODO Auto-generated method stub
+	protected void mostrarEstadisticas(String equipo) {
 		
+		HashMap<Integer, Integer> arbitros = new HashMap<Integer, Integer>();
+		// inicializar
+		for(int arbitro = 1; arbitro <=cantidadArbitrosPorDefecto; arbitro++)
+			arbitros.put(arbitro, 0);
+		
+		for(Integer fecha: fechasUI.keySet()) {
+			for(Partido e: fechasUI.get(fecha)) {
+				if(e.getLocal().equals(equipo) || e.getVisitante().equals(equipo)) {
+					arbitros.put(e.getArbitro(), arbitros.get(e.getArbitro())+1);
+				}
+			}
+		}
+		
+		for(int arbitro: arbitros.keySet()) {
+			System.out.println("Arbitro:" + arbitro + "Veces: " + arbitros.get(arbitro));
+		}
+		
+	}
+
+	protected void resaltarEquipo(String local) {
+		
+		// reset seleccion
+		for(Component c: panelAlgoritmoGoloso.getComponents()) {				
+			if(c instanceof JLabel) {
+				JLabel partido = (JLabel) c; 
+				partido.setForeground(Color.DARK_GRAY);
+			}
+		}
+		
+		ArrayList<JLabel> jlabels = new ArrayList<JLabel>();
+		
+		for(Component c: panelAlgoritmoGoloso.getComponents()) {				
+				if(c instanceof JLabel) {
+					JLabel partido = (JLabel) c; 
+					if(partido.getText().contains(local)) {
+						jlabels.add(partido);
+					}
+				}		
+		}
+		
+		for(JLabel label : jlabels) {
+			label.setForeground(Color.RED);
+		}
+	
+		contentPane.updateUI();
 	}
 
 	private void resetUIAlgoritmoGoloso() {
@@ -335,6 +394,26 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 		panelArchivoCargado.removeAll();
 		scrollPaneArchivoCargado.setViewportView(null);
 		this.datosCargadosY = 10;
+	}
+	
+	public void colocarDatosDeArchivoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
+		if(fechas != null && !fechas.isEmpty()) {
+			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
+			  colocarfechasDeArchivoUI(fecha, fechas.get(fecha));
+			}
+		} else {
+			throw new RuntimeException("Fechas incorrectas");
+		}
+	}
+	
+	public void colocarDatosDeAlgoritmoGolosoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
+		if(fechas != null && !fechas.isEmpty()) {
+			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
+			  colocarfechasAlgoritmoGoloso(fecha, fechas.get(fecha));
+			}
+		} else {
+			throw new RuntimeException("Fechas incorrectas");
+		}
 	}
 
 	@Override
@@ -349,7 +428,7 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		 Matcher disableGenerador = pattern.matcher(cantidadArbitrostField.getText());
+		 Matcher disableGenerador = patternCantArbitros.matcher(cantidadArbitrostField.getText());
 		 boolean off = disableGenerador.find();
 		 if(off || cantidadArbitrostField.getText().isEmpty()) {
 			 btnGenerarAlgoritmo.setEnabled(false);

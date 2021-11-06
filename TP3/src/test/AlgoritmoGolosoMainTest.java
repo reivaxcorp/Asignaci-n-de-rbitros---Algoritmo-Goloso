@@ -11,60 +11,61 @@ import org.junit.Test;
 import main.AlgoritmoGolosoMain;
 import main.ArchivoJSON;
 import main.FixtureGenerador;
+import main.MainUI;
 import main.Partido;
 
 public class AlgoritmoGolosoMainTest {
 
-	private FakeMainUITest fakeMainUITest;
+	private MainUI mainUI;
 	private AlgoritmoGolosoMain algoritmoGolosoMain;
 	private FixtureGenerador fix;
 	private final String NOMBRE_ARCHIVO_JSON = "fechas.json";
 
 	@Before
 	public void setup() {
-		this.fakeMainUITest = new FakeMainUITest();
-		this.algoritmoGolosoMain = new AlgoritmoGolosoMain(fakeMainUITest);
+		this.mainUI = new MainUI();
+		this.algoritmoGolosoMain = new AlgoritmoGolosoMain();
 		this.fix = new FixtureGenerador();
 		new ArchivoJSON(fix.obtenerFechas(), NOMBRE_ARCHIVO_JSON);
 		File file = new File("./"+NOMBRE_ARCHIVO_JSON);
 		this.algoritmoGolosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
-		this.algoritmoGolosoMain.colocarDatosDeArchivoUI(algoritmoGolosoMain.getFechas());
+		this.mainUI.colocarDatosDeArchivoUI(algoritmoGolosoMain.getFechas());
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void generarAlgoritmoGoloso_fechasNull_expetion() {
-		//algoritmoGolosoMain.generarAlgoritmoGoloso(null, -1);
+		algoritmoGolosoMain.generarAlgoritmoGoloso(null, -1);
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void generarAlgoritmoGoloso_fechasEmpty_expetion() {
 		HashMap<Integer, ArrayList<Partido>> fechas = algoritmoGolosoMain.getFechas();
 		fechas.clear();
-		//algoritmoGolosoMain.generarAlgoritmoGoloso(fechas, -1);
+		algoritmoGolosoMain.generarAlgoritmoGoloso(fechas, -1);
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void colocarDatosDeArchivoUI_fechasNull_expetion() {
-		algoritmoGolosoMain.colocarDatosDeAlgoritmoGolosoUI(null);
+		mainUI.colocarDatosDeAlgoritmoGolosoUI(null);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void colocarDatosDeArchivoUI_fechasEmpty_expetion() {
 		HashMap<Integer, ArrayList<Partido>> fechas = algoritmoGolosoMain.getFechas();
 		fechas.clear();
-		algoritmoGolosoMain.colocarDatosDeAlgoritmoGolosoUI(fechas);
+		mainUI.colocarDatosDeAlgoritmoGolosoUI(fechas);
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void colocarDatosDeAlgoritmoGolosoUI_fechasNull_expetion() {
-		algoritmoGolosoMain.colocarDatosDeAlgoritmoGolosoUI(null);
+		mainUI.colocarDatosDeAlgoritmoGolosoUI(null);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void colocarDatosDeAlgoritmoGolosoUI_fechasEmpty_expetion() {
 		HashMap<Integer, ArrayList<Partido>> fechas = algoritmoGolosoMain.getFechas();
 		fechas.clear();
-		algoritmoGolosoMain.colocarDatosDeAlgoritmoGolosoUI(fechas);
+		mainUI.colocarDatosDeAlgoritmoGolosoUI(fechas);
 	}
 	
 	@Test

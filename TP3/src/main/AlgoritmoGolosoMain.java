@@ -7,16 +7,9 @@ import javax.swing.SwingWorker;
 
 public class AlgoritmoGolosoMain {
 	
-	private onActualizaUI onActualizaUI;
 	private HashMap<Integer, ArrayList<Partido>> fechas; 
 	private int mi = 4; // mi a la maaxima cantidad de partidos de i con un mismo ´arbitro
-	private Random rn;
-	
-	public AlgoritmoGolosoMain(onActualizaUI observadorUI) {
-		this.onActualizaUI = observadorUI;
-		this.rn = new Random();
-		
-	}
+
 	
 	public HashMap<Integer, ArrayList<Partido>> generarAlgoritmoGoloso(HashMap<Integer, ArrayList<Partido>> fechas, int cantidadArbitros) {
  
@@ -69,37 +62,25 @@ public class AlgoritmoGolosoMain {
 		// busca todos los partidos entre ellos, cantidad de veces que juegan juntos en cada fecha
 		ArrayList<Partido> encuentros = obtenerEncuentros(mPartido, pFechas); 
 
-
 		// buscar la cantidad de veces que los arbitros aparecen en cada equipo . OK
 
 		// key arbitro, value cantidad de veces. 
 		HashMap<Integer, Integer> cantVecesArbitroEquipoLocal = obtenerArbitrosEquipo(cantArbitros, equipoLocal); 
-
 		// key arbitro, value cantidad de veces. 
 		HashMap<Integer, Integer> cantVecesArbitroEquipoVisitante = obtenerArbitrosEquipo(cantArbitros, equipoVisitante); 
 
-	
-		//  fecha 1
-		//if(cantVecesArbitroEquipoVisitante.isEmpty() && cantVecesArbitroEquipoLocal.isEmpty()) {
-		
 		int arbitro = obtenerArbitroSiguiente(pFechas, cantArbitros);
 		if(arbitro != 0) {
 			return arbitro;
 		} else {
-			
 		
-		//} else {
-
 			// buscar todos los arbitros de los dos equipos <= Mi partido. OK
 			HashMap<Integer, Integer> menoresLocalMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoLocal);
 			HashMap<Integer, Integer> menoresVisitanteMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoVisitante);
 	
 			int valor = obtenerArbitroCoincidentePartidos(menoresLocalMi, menoresVisitanteMi, pFechas, cantArbitros, fechaActual, encuentros);
-			//System.out.println(valor + " fecha" + fechaActual);
 			return valor;
 
-
-		//}
 		}
 
 	}
@@ -182,29 +163,33 @@ public class AlgoritmoGolosoMain {
     		int cantArbitros,
     		int fechaActual, ArrayList<Partido> encuentros) {
     	
+    	int arbitroLibre = 0; // nuestro arbitro disponible
+    	
 		// evitar estos arbitros ya se utilizaron hasta el momento
 		ArrayList<Integer> arbitrosNoDisponible = new ArrayList<Integer>();
-		for(Partido p: pFechas.get(fechaActual))
+		for(Partido p: pFechas.get(fechaActual)) {
 			if(arbitrosNoDisponible.contains(p.getArbitro()) == false) {
 				arbitrosNoDisponible.add(p.getArbitro());
 			}
+		}
 		
-		
-		
-		// los arbitros que ya se han seleccionado en anteriores fechas en el equipo
+		// los arbitros que ya se han seleccionado en algunos de los equipos
 		ArrayList<Integer> obtenerArbitrosYaSeleccionado = new ArrayList<Integer>();
 		
+		// equipo local
 		for(int arbitro : menoresLocalMi.keySet()) {
 			if( obtenerArbitrosYaSeleccionado.contains(arbitro) == false)
 				obtenerArbitrosYaSeleccionado.add(arbitro);
 		}
+		// equipo visitante
 		for(int arbitro : menoresVisitanteMi.keySet()) {
 			if( obtenerArbitrosYaSeleccionado.contains(arbitro) == false )
 				obtenerArbitrosYaSeleccionado.add(arbitro);
 		}
 	
-		int arbitroLibre = 0;
-		// buscar los arbitros no seleccionado para ese partido aún	
+		
+		// buscar los arbitros no seleccionado algunos de esos equipos
+		// ademas que no se hayan repetido para la fecha en arbitrosNoDisponible
 		for(int arbitro = 1; arbitro <= cantArbitros; arbitro++) {
 			if(obtenerArbitrosYaSeleccionado.contains(arbitro) == false && 
 					arbitrosNoDisponible.contains(arbitro) == false) {
@@ -213,54 +198,34 @@ public class AlgoritmoGolosoMain {
 		}
 		
 			 
-			
+		// se han terminado la disponibilidad de arbitros que han dirigido 
+		// ambos partidos, es el momento de repetir
 		if(arbitroLibre == 0) {
-			return 0;
+			// evitar los arbitros que ya se utilizaron en los encuentros
+			ArrayList<Integer> arbitrosEncuentros = new ArrayList<Integer>();
+			
+			for(Partido p: encuentros) {
+				if(arbitrosEncuentros.contains(p.getArbitro()) == false) {
+					arbitrosEncuentros.add(p.getArbitro());
+				}
+			}
+			for(int arbitro = 1; arbitro <= cantArbitros; arbitro++) {
+				
+				// debe ser un arbitro que que se haya repetido 
+				// pero que aún no se haya colocado hasta en la fecha
+				if(arbitrosEncuentros.contains(arbitro) == false && 
+						arbitrosNoDisponible.contains(arbitro) == false) {
+					arbitroLibre = arbitro;
+				}
+			}
+		
+			return arbitroLibre;
 		}
+		
 				
 		 return arbitroLibre;
     }
     
-    private int obtenerElArbitroEquilibrado(
-    		HashMap<Integer, Integer> menoresLocalMi, 
-    		HashMap<Integer, Integer> menoresVisitanteMi,
-    		ArrayList<Partido> partidosFecha) {
-    	
-    	
-    	
-    	ArrayList<Integer> arbitrosHastaElMomento = new ArrayList<Integer>();
-    	for(Partido p: partidosFecha)
-    		if(p.getArbitro() != -1)
-    			arbitrosHastaElMomento.add(p.getArbitro());
-    	
-    	for(int arbitro: arbitrosHastaElMomento) {
-    		
-    		for(int arbitroYaSeleccionado: menoresLocalMi.keySet()) {
-    			
-    		}
-    		
-    	}
-    
-    	return 0;
-    }
-    
-    
-    private int obtenerArbitroEquilibrado(HashMap<Integer, Integer> arbitrosSeccionados) {
-    	
-    	if(arbitrosSeccionados.isEmpty())
-    		throw new IllegalArgumentException("seleccion de arbitros vacia");
-    	
-		ArrayList<Integer> arbitrosList = new ArrayList<Integer>();
-		
-		for(int arbitros : arbitrosSeccionados.keySet()) {
-			arbitrosList.add(arbitros);
-		}
-		
-		int arbitroRandom = rn.nextInt(arbitrosList.size());
-		return arbitrosList.get(arbitroRandom);
-    }
-    
-
 	// un arbitro por partido
 	public HashMap<String, ArrayList<Integer>> crearListaArbitrosPorFecha(HashMap<Integer, ArrayList<Partido>> fechas) {
 		HashMap<String, ArrayList<Integer>> arbitros
@@ -275,31 +240,6 @@ public class AlgoritmoGolosoMain {
 	  return arbitros;		 
 	}
 	
-	public void colocarDatosDeArchivoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
-		if(fechas != null && !fechas.isEmpty()) {
-			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
-			  onActualizaUI.colocarfechasDeArchivoUI(fecha, fechas.get(fecha));
-			}
-		} else {
-			throw new RuntimeException("Fechas incorrectas");
-		}
-	}
-	
-	public void colocarDatosDeAlgoritmoGolosoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
-		if(fechas != null && !fechas.isEmpty()) {
-			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
-			  onActualizaUI.colocarfechasAlgoritmoGoloso(fecha, fechas.get(fecha));
-			}
-		} else {
-			throw new RuntimeException("Fechas incorrectas");
-		}
-	}
-
-
-	private int arbitroAleatorio(int cantArbitros) {
-		int arbitroRandom = rn.nextInt(cantArbitros);
-		return arbitroRandom +1;
-	}
 
 	public void resetArbitros() {
 		for(int f: fechas.keySet()) {
