@@ -274,15 +274,19 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 				// equipos
 				int espacioLabelPartidos = datosGeneradosGolosoY + 17;
 				for(int partido = 0; partido < partidos.size(); partido ++) {
-				
+					
+					String local = partidos.get(partido).getLocal();
+					String visitante = partidos.get(partido).getVisitante();
+					
 					JLabel partidoLabel = new JLabel(
 							"<html>" 
-							+partidos.get(partido).getLocal() 
+							+local
 							+"<font color=\"green\"> VS </font>"	
-							+partidos.get(partido).getVisitante()
+							+visitante
 							+"</html>"
 							);
 					partidoLabel.setBounds(20, espacioLabelPartidos, 250, 14);
+					
 					
 					JLabel arbitro = new JLabel("<html><font color=\"blue\"> Arbitro: </font>"
 							+partidos.get(partido).getArbitro()
@@ -292,7 +296,22 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 					panelAlgoritmoGoloso.add(partidoLabel);
 					panelAlgoritmoGoloso.add(arbitro);
 					espacioLabelPartidos += 17;
-				
+					
+					// ver boton
+					JButton resaltarEquipo = new JButton("ver");
+					resaltarEquipo.setBounds(arbitro.getBounds().x+arbitro.getBounds().width, arbitro.getBounds().y, 60, 14);
+					
+					resaltarEquipo.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+						
+							resaltarEquipos(local, visitante);
+						}
+					});
+					
+					panelAlgoritmoGoloso.add(resaltarEquipo);
+					
 				}
 				datosGeneradosGolosoY = espacioLabelPartidos;
 				
@@ -302,6 +321,11 @@ public class MainUI extends JFrame implements onActualizaUI, KeyListener{
 		
 	}
 	
+	protected void resaltarEquipos(String local, String visitante) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void resetUIAlgoritmoGoloso() {
 		panelAlgoritmoGoloso.removeAll();
 		scrollPaneAlgoritmoGoloso.setViewportView(null);
