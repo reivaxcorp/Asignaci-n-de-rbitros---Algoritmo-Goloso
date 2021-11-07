@@ -68,10 +68,10 @@ public class AlgoritmoGolosoMain {
 		} else {
 		
 			// buscar la cantidad de veces que los arbitros aparecen en cada equipo . OK
-			HashMap<Integer, Integer> menoresLocalMi = obtenerArbitrosEquipo(cantArbitros, equipoLocal);
-			HashMap<Integer, Integer> menoresVisitanteMi = obtenerArbitrosEquipo(cantArbitros, equipoVisitante); 
+			HashMap<Integer, Integer> partidosDeLocal = obtenerArbitrosEquipo(cantArbitros, equipoLocal);
+			HashMap<Integer, Integer> partidosDeVisitante = obtenerArbitrosEquipo(cantArbitros, equipoVisitante); 
 			
-			int valor = obtenerArbitroCoincidentePartidos(menoresLocalMi, menoresVisitanteMi, pFechas, cantArbitros, fechaActual, encuentros);
+			int valor = calcularArbitro(partidosDeLocal, partidosDeVisitante, pFechas, cantArbitros, fechaActual, encuentros);
 			return valor;
 
 		}
@@ -136,9 +136,9 @@ public class AlgoritmoGolosoMain {
     
     // cantidad de veces que los dos arbitros dirigieron al mismo equipo
     // debemos buscar el arbitro que menos haya dirigido el partido en el encuentro actual
-    private int obtenerArbitroCoincidentePartidos(
-     		HashMap<Integer, Integer> menoresLocalMi,
-    		HashMap<Integer, Integer> menoresVisitanteMi,
+    private int calcularArbitro(
+     		HashMap<Integer, Integer> partidosDeLocal,
+    		HashMap<Integer, Integer> partidosDeVisitante,
     		HashMap<Integer, ArrayList<Partido>> pFechas,
     		int cantArbitros,
     		int fechaActual, ArrayList<Partido> encuentros) {
@@ -146,10 +146,10 @@ public class AlgoritmoGolosoMain {
     	int arbitroLibre = 0; // nuestro arbitro disponible
     	
 		// evitar estos arbitros ya se utilizaron hasta el momento
-		ArrayList<Integer> arbitrosNoDisponible = new ArrayList<Integer>();
+		ArrayList<Integer> arbitrosYaAsignadoEnFecha = new ArrayList<Integer>();
 		for(Partido p: pFechas.get(fechaActual)) {
-			if(arbitrosNoDisponible.contains(p.getArbitro()) == false) {
-				arbitrosNoDisponible.add(p.getArbitro());
+			if(arbitrosYaAsignadoEnFecha.contains(p.getArbitro()) == false) {
+				arbitrosYaAsignadoEnFecha.add(p.getArbitro());
 			}
 		}
 		
@@ -157,12 +157,12 @@ public class AlgoritmoGolosoMain {
 		ArrayList<Integer> obtenerArbitrosYaSeleccionado = new ArrayList<Integer>();
 		
 		// equipo local
-		for(int arbitro : menoresLocalMi.keySet()) {
+		for(int arbitro : partidosDeLocal.keySet()) {
 			if( obtenerArbitrosYaSeleccionado.contains(arbitro) == false)
 				obtenerArbitrosYaSeleccionado.add(arbitro);
 		}
 		// equipo visitante
-		for(int arbitro : menoresVisitanteMi.keySet()) {
+		for(int arbitro : partidosDeVisitante.keySet()) {
 			if( obtenerArbitrosYaSeleccionado.contains(arbitro) == false )
 				obtenerArbitrosYaSeleccionado.add(arbitro);
 		}
@@ -172,7 +172,7 @@ public class AlgoritmoGolosoMain {
 		// ademas que no se hayan repetido para la fecha en arbitrosNoDisponible
 		for(int arbitro = 1; arbitro <= cantArbitros; arbitro++) {
 			if(obtenerArbitrosYaSeleccionado.contains(arbitro) == false && 
-					arbitrosNoDisponible.contains(arbitro) == false) {
+					arbitrosYaAsignadoEnFecha.contains(arbitro) == false) {
 				arbitroLibre = arbitro;
 			}
 		}
@@ -193,16 +193,17 @@ public class AlgoritmoGolosoMain {
 			for(int arbitro = 1; arbitro <= cantArbitros; arbitro++) {
 				
 				// debe ser un arbitro que que se haya repetido 
-				// pero que aún no se haya colocado hasta en la fecha
+				// pero que aún no se haya colocado en el encuentro
 				if(arbitrosEncuentros.contains(arbitro) == false && 
-						arbitrosNoDisponible.contains(arbitro) == false) {
+						arbitrosYaAsignadoEnFecha.contains(arbitro) == false) {
 					arbitroLibre = arbitro;
 				}
 			}
 			
-			// la cantidad de arbitros es menor que la cantidad de fechas 
+			//  No hay arbitros que no se hayan colocado en el encuentro
+			//  buscar el menor arbitro que se haya repetido entre las fechas
 			if(arbitroLibre == 0) {
-				
+				return menorCantidadDeArbitroRepetido(pFechas, cantArbitros);
 			}
 		
 			return arbitroLibre;
@@ -210,6 +211,32 @@ public class AlgoritmoGolosoMain {
 		
 				
 		 return arbitroLibre;
+    }
+    
+    private int menorCantidadDeArbitroRepetido(HashMap<Integer, ArrayList<Partido>> pFechas, int cantArbitros) {
+    	HashMap<Integer, Integer> cantidadArbitros = new HashMap<Integer, Integer>();
+    
+    	// Inicializar
+    	for(int arbitro = 1; arbitro <= cantArbitros; arbitro++)
+    		cantidadArbitros.put(arbitro, 0);
+    	
+    	for(int fecha: pFechas.keySet()) {
+    		for(Partido p: pFechas.get(fecha)) {
+    			if(p.getArbitro() != -1)
+    				cantidadArbitros.put(p.getArbitro(), cantidadArbitros.get(p.getArbitro()) +1);
+    		}
+    	}
+    	
+    	int cantVecesMenosRepetido = Integer.MAX_VALUE;
+    	int arbitroMenosRepetido = 1;
+    	
+    	for(int arbitro: cantidadArbitros.keySet()) {
+    		if(cantidadArbitros.get(arbitro) < cantVecesMenosRepetido) {
+    			cantVecesMenosRepetido = cantidadArbitros.get(arbitro);
+    			arbitroMenosRepetido = arbitro;
+    		}
+    	}
+    	return arbitroMenosRepetido;
     }
     
 	// un arbitro por partido
