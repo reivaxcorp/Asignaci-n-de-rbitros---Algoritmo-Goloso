@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
+
+import org.eclipse.swt.graphics.RGB;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
@@ -36,6 +39,7 @@ public class MainUI extends JFrame implements KeyListener{
 	private JScrollPane scrollPaneArchivoCargado;
 	private JPanel panelArchivoCargado;
 	private JPanel panelAlgoritmoGoloso;
+	private JPanel panelEstadisticas;
 	private JScrollPane scrollPaneAlgoritmoGoloso;
 	private JScrollPane scrollPanelEstadisticas;
 	private JButton btnGenerarAlgoritmo;
@@ -45,7 +49,9 @@ public class MainUI extends JFrame implements KeyListener{
 	private int datosCargadosY = 10;
 	private int datosGeneradosGolosoY = 10;
 	private int cantidadArbitrosPorDefecto = 13;
-	
+	private int datosEstadisticasX = 10;
+	private int datosEstadisticasY = 10;
+
 	private AlgoritmoGolosoMain golosoMain;
 	private JTextField cantidadArbitrostField;
 	private HashMap<Integer, ArrayList<Partido>> fechasUI;
@@ -90,6 +96,7 @@ public class MainUI extends JFrame implements KeyListener{
 	    btnGenerarAlgoritmo = new JButton("Generar");
 		btnGenerarAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
+				 resetUIEstadisticas();
 				 mostrarResultadosAlgoritmoGoloso();
 			}
 		});
@@ -109,7 +116,7 @@ public class MainUI extends JFrame implements KeyListener{
 		scrollPaneArchivoCargado = new JScrollPane();
 		scrollPaneArchivoCargado.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneArchivoCargado.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPaneArchivoCargado.setBounds(24, 105, 263, 546);
+		scrollPaneArchivoCargado.setBounds(24, 105, 263, 508);
 		scrollPaneArchivoCargado.setWheelScrollingEnabled(true);
 		contentPane.add(scrollPaneArchivoCargado);
 		
@@ -117,8 +124,15 @@ public class MainUI extends JFrame implements KeyListener{
 		scrollPaneAlgoritmoGoloso.setWheelScrollingEnabled(true);
 		scrollPaneAlgoritmoGoloso.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneAlgoritmoGoloso.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPaneAlgoritmoGoloso.setBounds(311, 105, 448, 546);
+		scrollPaneAlgoritmoGoloso.setBounds(311, 105, 448, 508);
 		contentPane.add(scrollPaneAlgoritmoGoloso);
+		
+		scrollPanelEstadisticas = new JScrollPane();
+		scrollPanelEstadisticas.setWheelScrollingEnabled(true);
+		scrollPanelEstadisticas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPanelEstadisticas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPanelEstadisticas.setBounds(24, 624, 735, 126);
+		contentPane.add(scrollPanelEstadisticas);
 		
 		JLabel lblNewLabel = new JLabel("Equipos sin arbitro");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -140,21 +154,21 @@ public class MainUI extends JFrame implements KeyListener{
 		cantidadArbitrostField.setText(Integer.toString(cantidadArbitrosPorDefecto));
 		
 		JLabel lblNewLabelCantidadArbitros = new JLabel("Cantidad Arbitros");
+		lblNewLabelCantidadArbitros.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNewLabelCantidadArbitros.setForeground(Color.BLACK);
 		lblNewLabelCantidadArbitros.setBounds(200, 4, 104, 14);
 		contentPane.add(lblNewLabelCantidadArbitros);
 		
-		scrollPanelEstadisticas = new JScrollPane();
-		scrollPanelEstadisticas.setWheelScrollingEnabled(true);
-		scrollPanelEstadisticas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPanelEstadisticas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPanelEstadisticas.setBounds(24, 662, 735, 88);
-		contentPane.add(scrollPanelEstadisticas);
+	
 		
 		panelArchivoCargado = new JPanel();
 		panelArchivoCargado.setLayout(null);
 		
 		panelAlgoritmoGoloso = new JPanel();
 		panelAlgoritmoGoloso.setLayout(null);
+		
+		panelEstadisticas = new JPanel();
+		panelEstadisticas.setLayout(null);
 		
 		partidoLabelIndex = new ArrayList<Integer>();
 		
@@ -319,6 +333,7 @@ public class MainUI extends JFrame implements KeyListener{
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							resaltarEquipo(local);
+							resetUIEstadisticas();
 							mostrarEstadisticas(local);
 						}
 					});
@@ -330,7 +345,8 @@ public class MainUI extends JFrame implements KeyListener{
 				}
 				datosGeneradosGolosoY = espacioLabelPartidos;
 				
-				panelAlgoritmoGoloso.setPreferredSize(new Dimension(418, datosGeneradosGolosoY));
+				// datosGeneradosGoloso Y es la posicion, del ultimo item.
+				panelAlgoritmoGoloso.setPreferredSize(new Dimension(scrollPaneAlgoritmoGoloso.getWidth(), datosGeneradosGolosoY));
 				scrollPaneAlgoritmoGoloso.setViewportView(panelAlgoritmoGoloso);
 				contentPane.updateUI();
 		
@@ -339,22 +355,59 @@ public class MainUI extends JFrame implements KeyListener{
 	protected void mostrarEstadisticas(String equipo) {
 		
 		HashMap<Integer, Integer> arbitros = new HashMap<Integer, Integer>();
+		ArrayList<JLabel> labelsArbitros = new ArrayList<JLabel>();
+		
+		JLabel pEquipo = new JLabel("Equipo: " +equipo);
+		
+		pEquipo.setBounds(panelEstadisticas.getX(), panelEstadisticas.getY(), 500, 12);
+		JLabel arbitrosTitulo = new JLabel("Numero Arbitros:");
+		arbitrosTitulo.setBounds(pEquipo.getX(), pEquipo.getY() + 22, 500, 12);
+		pEquipo.setBounds(panelEstadisticas.getX(), panelEstadisticas.getY(), 100, 12);
+		
+		panelEstadisticas.add(pEquipo);
+		panelEstadisticas.add(arbitrosTitulo);
 		// inicializar
-		for(int arbitro = 1; arbitro <=cantidadArbitrosPorDefecto; arbitro++)
+		int espaciolabelarbitro = pEquipo.getX();
+		for(int arbitro = 1; arbitro <= cantidadArbitrosPorDefecto; arbitro++) {
 			arbitros.put(arbitro, 0);
+			JLabel arbitroLabel = new JLabel(String.valueOf(arbitro));
+			arbitroLabel.setBounds(espaciolabelarbitro, arbitrosTitulo.getY() + 20, 50, 12);
+			panelEstadisticas.add(arbitroLabel);
+			espaciolabelarbitro += arbitroLabel.getWidth();
+			labelsArbitros.add(arbitroLabel);
+		}
 		
 		for(Integer fecha: fechasUI.keySet()) {
 			for(Partido e: fechasUI.get(fecha)) {
 				if(e.getLocal().equals(equipo) || e.getVisitante().equals(equipo)) {
-					arbitros.put(e.getArbitro(), arbitros.get(e.getArbitro())+1);
+					if(e.getArbitro() != 0)
+						arbitros.put(e.getArbitro(), arbitros.get(e.getArbitro())+1);
 				}
 			}
 		}
+	
+		//System.out.println(equipo);
+		 for(int arbitro: arbitros.keySet()) {
+			
+			 for(JLabel label: labelsArbitros) {
+				 
+				 if(label.getText().equals(Integer.toString(arbitro))) {
+					 JLabel cantVeces = new JLabel(String.valueOf(arbitros.get(arbitro)));
+					 cantVeces.setForeground(Color.BLUE);
+					 cantVeces.setFont(new Font("Tahoma", Font.BOLD, 14));
+					 cantVeces.setBounds(label.getX(), label.getY()+16, label.getWidth(), label.getHeight());
+					 panelEstadisticas.add(cantVeces);
+	 
+				 }
+				
+				 
+			 }
+		} 
 		
-		for(int arbitro: arbitros.keySet()) {
-			System.out.println("Arbitro:" + arbitro + "Veces: " + arbitros.get(arbitro));
-		}
 		
+		panelEstadisticas.setPreferredSize(new Dimension(espaciolabelarbitro, scrollPanelEstadisticas.getHeight()));
+		scrollPanelEstadisticas.setViewportView(panelEstadisticas);
+		contentPane.updateUI();
 	}
 
 	protected void resaltarEquipo(String local) {
@@ -394,6 +447,11 @@ public class MainUI extends JFrame implements KeyListener{
 		panelArchivoCargado.removeAll();
 		scrollPaneArchivoCargado.setViewportView(null);
 		this.datosCargadosY = 10;
+	}
+	private void resetUIEstadisticas() {
+		panelEstadisticas.removeAll();
+		scrollPanelEstadisticas.setViewportView(null);
+		this.datosEstadisticasX = 10;
 	}
 	
 	public void colocarDatosDeArchivoUI(HashMap<Integer, ArrayList<Partido>> fechas) {

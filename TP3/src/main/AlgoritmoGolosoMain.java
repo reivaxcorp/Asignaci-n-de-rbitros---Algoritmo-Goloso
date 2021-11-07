@@ -8,8 +8,7 @@ import javax.swing.SwingWorker;
 public class AlgoritmoGolosoMain {
 	
 	private HashMap<Integer, ArrayList<Partido>> fechas; 
-	private int mi = 4; // mi a la maaxima cantidad de partidos de i con un mismo ´arbitro
-
+ 
 	
 	public HashMap<Integer, ArrayList<Partido>> generarAlgoritmoGoloso(HashMap<Integer, ArrayList<Partido>> fechas, int cantidadArbitros) {
  
@@ -62,22 +61,16 @@ public class AlgoritmoGolosoMain {
 		// busca todos los partidos entre ellos, cantidad de veces que juegan juntos en cada fecha
 		ArrayList<Partido> encuentros = obtenerEncuentros(mPartido, pFechas); 
 
-		// buscar la cantidad de veces que los arbitros aparecen en cada equipo . OK
-
-		// key arbitro, value cantidad de veces. 
-		HashMap<Integer, Integer> cantVecesArbitroEquipoLocal = obtenerArbitrosEquipo(cantArbitros, equipoLocal); 
-		// key arbitro, value cantidad de veces. 
-		HashMap<Integer, Integer> cantVecesArbitroEquipoVisitante = obtenerArbitrosEquipo(cantArbitros, equipoVisitante); 
 
 		int arbitro = obtenerArbitroSiguiente(pFechas, cantArbitros);
 		if(arbitro != 0) {
 			return arbitro;
 		} else {
 		
-			// buscar todos los arbitros de los dos equipos <= Mi partido. OK
-			HashMap<Integer, Integer> menoresLocalMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoLocal);
-			HashMap<Integer, Integer> menoresVisitanteMi = obtenerArbitrosHastaMi(cantVecesArbitroEquipoVisitante);
-	
+			// buscar la cantidad de veces que los arbitros aparecen en cada equipo . OK
+			HashMap<Integer, Integer> menoresLocalMi = obtenerArbitrosEquipo(cantArbitros, equipoLocal);
+			HashMap<Integer, Integer> menoresVisitanteMi = obtenerArbitrosEquipo(cantArbitros, equipoVisitante); 
+			
 			int valor = obtenerArbitroCoincidentePartidos(menoresLocalMi, menoresVisitanteMi, pFechas, cantArbitros, fechaActual, encuentros);
 			return valor;
 
@@ -141,19 +134,6 @@ public class AlgoritmoGolosoMain {
     	return arbitros;
     }
     
-    private HashMap<Integer, Integer> obtenerArbitrosHastaMi(HashMap<Integer, Integer> cantArbitrosPorEquipo) {
-    	HashMap<Integer, Integer> menoresMi = 
-				new HashMap<Integer, Integer>(); 
-    	
-    	for(int arbitro: cantArbitrosPorEquipo.keySet()) {
-			if(cantArbitrosPorEquipo.get(arbitro) <= mi && 
-					cantArbitrosPorEquipo.get(arbitro) > 0) {
-				menoresMi.put(arbitro, cantArbitrosPorEquipo.get(arbitro));
-			}
-		}
-    	return menoresMi;
-    }
-    
     // cantidad de veces que los dos arbitros dirigieron al mismo equipo
     // debemos buscar el arbitro que menos haya dirigido el partido en el encuentro actual
     private int obtenerArbitroCoincidentePartidos(
@@ -209,6 +189,7 @@ public class AlgoritmoGolosoMain {
 					arbitrosEncuentros.add(p.getArbitro());
 				}
 			}
+			
 			for(int arbitro = 1; arbitro <= cantArbitros; arbitro++) {
 				
 				// debe ser un arbitro que que se haya repetido 
@@ -217,6 +198,11 @@ public class AlgoritmoGolosoMain {
 						arbitrosNoDisponible.contains(arbitro) == false) {
 					arbitroLibre = arbitro;
 				}
+			}
+			
+			// la cantidad de arbitros es menor que la cantidad de fechas 
+			if(arbitroLibre == 0) {
+				
 			}
 		
 			return arbitroLibre;
