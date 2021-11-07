@@ -8,9 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
-
-import org.eclipse.swt.graphics.RGB;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
@@ -49,8 +46,6 @@ public class MainUI extends JFrame implements KeyListener{
 	private int datosCargadosY = 10;
 	private int datosGeneradosGolosoY = 10;
 	private int cantidadArbitrosPorDefecto = 13;
-	private int datosEstadisticasX = 10;
-	private int datosEstadisticasY = 10;
 
 	private AlgoritmoGolosoMain golosoMain;
 	private JTextField cantidadArbitrostField;
@@ -307,28 +302,12 @@ public class MainUI extends JFrame implements KeyListener{
 					String local = partidos.get(partido).getLocal();
 					String visitante = partidos.get(partido).getVisitante();
 					
-					JLabel partidoLabel = new JLabel(
-							"<html>" 
-							+local
-							+"<font color=\"green\"> VS </font>"	
-							+visitante
-							+"</html>"
-							);
-					partidoLabel.setBounds(20, espacioLabelPartidos, 250, 14);
+					JButton partidoLocalButton = new JButton(local);
+					JButton partidoVisitanteButton = new JButton(visitante);
+					partidoLocalButton.setBounds(20, espacioLabelPartidos, 120, 14);
+					partidoVisitanteButton.setBounds(partidoLocalButton.getX() + partidoLocalButton.getWidth(), espacioLabelPartidos, partidoLocalButton.getWidth(), 14);
 					
-					JLabel arbitro = new JLabel("<html><font color=\"blue\"> Arbitro: </font>"
-							+partidos.get(partido).getArbitro()
-							+"</html>");
-					arbitro.setBounds(partidoLabel.getBounds().x+partidoLabel.getBounds().width, partidoLabel.getBounds().y, 80, partidoLabel.getBounds().height);
-					panelAlgoritmoGoloso.add(partidoLabel);
-					panelAlgoritmoGoloso.add(arbitro);
-					espacioLabelPartidos += 17;
-					
-					// ver boton
-					JButton resaltarEquipo = new JButton("ver");
-					resaltarEquipo.setBounds(arbitro.getBounds().x+arbitro.getBounds().width, arbitro.getBounds().y, 60, 14);
-					
-					resaltarEquipo.addActionListener(new ActionListener() {
+					partidoLocalButton.addActionListener(new ActionListener() {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -337,8 +316,26 @@ public class MainUI extends JFrame implements KeyListener{
 							mostrarEstadisticas(local);
 						}
 					});
+					partidoVisitanteButton.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							resaltarEquipo(visitante);
+							resetUIEstadisticas();
+							mostrarEstadisticas(visitante);
+						}
+					});
 					
-					panelAlgoritmoGoloso.add(resaltarEquipo);
+					
+					JLabel arbitro = new JLabel("<html><font color=\"blue\"> Arbitro: </font>"
+							+partidos.get(partido).getArbitro()
+							+"</html>");
+					
+					arbitro.setBounds(partidoVisitanteButton.getBounds().x+partidoVisitanteButton.getBounds().width, partidoVisitanteButton.getBounds().y, 80, partidoVisitanteButton.getBounds().height);
+					panelAlgoritmoGoloso.add(partidoLocalButton);
+					panelAlgoritmoGoloso.add(partidoVisitanteButton);
+					panelAlgoritmoGoloso.add(arbitro);
+					espacioLabelPartidos += 17;	
 					
 					partidoLabelIndex.add(indexCountPartidoLabel);
 					indexCountPartidoLabel ++;
@@ -352,7 +349,7 @@ public class MainUI extends JFrame implements KeyListener{
 		
 	}
 	
-	protected void mostrarEstadisticas(String equipo) {
+	public void mostrarEstadisticas(String equipo) {
 		
 		HashMap<Integer, Integer> arbitros = new HashMap<Integer, Integer>();
 		ArrayList<JLabel> labelsArbitros = new ArrayList<JLabel>();
@@ -360,9 +357,8 @@ public class MainUI extends JFrame implements KeyListener{
 		JLabel pEquipo = new JLabel("Equipo: " +equipo);
 		
 		pEquipo.setBounds(panelEstadisticas.getX(), panelEstadisticas.getY(), 500, 12);
-		JLabel arbitrosTitulo = new JLabel("Numero Arbitros:");
+		JLabel arbitrosTitulo = new JLabel("Cantidad de arbitros:");
 		arbitrosTitulo.setBounds(pEquipo.getX(), pEquipo.getY() + 22, 500, 12);
-		pEquipo.setBounds(panelEstadisticas.getX(), panelEstadisticas.getY(), 100, 12);
 		
 		panelEstadisticas.add(pEquipo);
 		panelEstadisticas.add(arbitrosTitulo);
@@ -410,30 +406,32 @@ public class MainUI extends JFrame implements KeyListener{
 		contentPane.updateUI();
 	}
 
-	protected void resaltarEquipo(String local) {
+	protected void resaltarEquipo(String equipo) {
 		
 		// reset seleccion
 		for(Component c: panelAlgoritmoGoloso.getComponents()) {				
-			if(c instanceof JLabel) {
-				JLabel partido = (JLabel) c; 
-				partido.setForeground(Color.DARK_GRAY);
+			if(c instanceof JButton) {
+				JButton partido = (JButton) c; 
+				partido.setForeground(null);
+				partido.setBackground(null);
 			}
 		}
 		
-		ArrayList<JLabel> jlabels = new ArrayList<JLabel>();
+		ArrayList<JButton> jButtons = new ArrayList<JButton>();
 		
 		for(Component c: panelAlgoritmoGoloso.getComponents()) {				
-				if(c instanceof JLabel) {
-					JLabel partido = (JLabel) c; 
-					if(partido.getText().contains(local)) {
-						jlabels.add(partido);
+				if(c instanceof JButton) {
+					JButton partido = (JButton) c; 
+					if(partido.getText().contains(equipo)) {
+						jButtons.add(partido);
 					}
 				}		
 		}
 		
-		for(JLabel label : jlabels) {
-			label.setForeground(Color.RED);
-		}
+		for(JButton button : jButtons) {
+			button.setForeground(Color.WHITE);
+			button.setBackground(Color.BLACK);
+		 }
 	
 		contentPane.updateUI();
 	}
@@ -451,7 +449,6 @@ public class MainUI extends JFrame implements KeyListener{
 	private void resetUIEstadisticas() {
 		panelEstadisticas.removeAll();
 		scrollPanelEstadisticas.setViewportView(null);
-		this.datosEstadisticasX = 10;
 	}
 	
 	public void colocarDatosDeArchivoUI(HashMap<Integer, ArrayList<Partido>> fechas) {

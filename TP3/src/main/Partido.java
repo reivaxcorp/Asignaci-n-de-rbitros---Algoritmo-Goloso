@@ -1,8 +1,7 @@
 package main;
 
-import java.util.Comparator;
 
-public class  Partido implements Comparator<Partido>{
+public class  Partido {
 
 	private String local;
 	private String visitante;
@@ -38,11 +37,5 @@ public class  Partido implements Comparator<Partido>{
 		return "Partido [local=" + local + ", visitante=" + visitante + ", arbitro=" + arbitro + "]";
 	}
 
-
-	@Override
-	public int compare(Partido o1, Partido o2) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 }
