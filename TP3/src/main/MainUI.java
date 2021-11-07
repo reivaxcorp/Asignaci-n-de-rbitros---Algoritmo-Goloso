@@ -93,9 +93,10 @@ public class MainUI extends JFrame implements KeyListener{
 			public void actionPerformed(ActionEvent e) {	
 				 resetUIEstadisticas();
 				 mostrarResultadosAlgoritmoGoloso();
+				 switchGenerarBtn();
 			}
 		});
-		btnGenerarAlgoritmo.setBounds(428, 0, 89, 23);
+		btnGenerarAlgoritmo.setBounds(539, 26, 89, 23);
 		contentPane.add(btnGenerarAlgoritmo);
 		
 		JButton btnNewButton_1 = new JButton("Abrir Archivo");
@@ -105,7 +106,7 @@ public class MainUI extends JFrame implements KeyListener{
 			}
 
 		});
-		btnNewButton_1.setBounds(0, 0, 190, 23);
+		btnNewButton_1.setBounds(92, 26, 190, 23);
 		contentPane.add(btnNewButton_1);
 		
 		scrollPaneArchivoCargado = new JScrollPane();
@@ -144,14 +145,14 @@ public class MainUI extends JFrame implements KeyListener{
 		cantidadArbitrostField.addKeyListener(this);
 	
 		cantidadArbitrostField.setToolTipText("Cantidad de arbitros");
-		cantidadArbitrostField.setBounds(311, 1, 86, 20);
+		cantidadArbitrostField.setBounds(422, 27, 86, 20);
 		contentPane.add(cantidadArbitrostField);
 		cantidadArbitrostField.setText(Integer.toString(cantidadArbitrosPorDefecto));
 		
 		JLabel lblNewLabelCantidadArbitros = new JLabel("Cantidad Arbitros");
 		lblNewLabelCantidadArbitros.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabelCantidadArbitros.setForeground(Color.BLACK);
-		lblNewLabelCantidadArbitros.setBounds(200, 4, 104, 14);
+		lblNewLabelCantidadArbitros.setBounds(311, 30, 104, 14);
 		contentPane.add(lblNewLabelCantidadArbitros);
 		
 	
@@ -469,8 +470,12 @@ public class MainUI extends JFrame implements KeyListener{
 		} else {
 			throw new RuntimeException("Fechas incorrectas");
 		}
+		switchGenerarBtn();
 	}
 
+	private void switchGenerarBtn() {
+		 btnGenerarAlgoritmo.setEnabled(!btnGenerarAlgoritmo.isEnabled());
+	}
 	@Override
 	public void keyTyped(KeyEvent e) {
 	   // TODO no implemented
