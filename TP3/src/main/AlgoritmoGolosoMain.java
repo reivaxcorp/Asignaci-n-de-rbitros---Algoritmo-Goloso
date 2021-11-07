@@ -141,7 +141,8 @@ public class AlgoritmoGolosoMain {
     		HashMap<Integer, Integer> partidosDeVisitante,
     		HashMap<Integer, ArrayList<Partido>> pFechas,
     		int cantArbitros,
-    		int fechaActual, ArrayList<Partido> encuentros) {
+    		int fechaActual,
+    		ArrayList<Partido> encuentros) {
     	
     	int arbitroLibre = 0; // nuestro arbitro disponible
     	
