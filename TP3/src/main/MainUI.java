@@ -8,13 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
@@ -35,12 +28,17 @@ import java.awt.event.KeyListener;
 
 public class MainUI extends JFrame implements KeyListener{
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JScrollPane scrollPaneArchivoCargado;
 	private JPanel panelArchivoCargado;
 	private JPanel panelAlgoritmoGoloso;
+	private JPanel panelEstadisticas;
 	private JScrollPane scrollPaneAlgoritmoGoloso;
+	private JScrollPane scrollPanelEstadisticas;
 	private JButton btnGenerarAlgoritmo;
 	private  Pattern patternCantArbitros;
 	private final String EXTENCION = "json";
@@ -55,8 +53,7 @@ public class MainUI extends JFrame implements KeyListener{
 	
 	private ArrayList<Integer> partidoLabelIndex;
 	private int indexCountPartidoLabel;
-	
- 	/**
+	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -94,6 +91,7 @@ public class MainUI extends JFrame implements KeyListener{
 	    btnGenerarAlgoritmo = new JButton("Generar");
 		btnGenerarAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
+				 resetUIEstadisticas();
 				 mostrarResultadosAlgoritmoGoloso();
 				 switchGenerarBtn();
 			}
@@ -124,6 +122,13 @@ public class MainUI extends JFrame implements KeyListener{
 		scrollPaneAlgoritmoGoloso.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPaneAlgoritmoGoloso.setBounds(311, 105, 448, 508);
 		contentPane.add(scrollPaneAlgoritmoGoloso);
+		
+		scrollPanelEstadisticas = new JScrollPane();
+		scrollPanelEstadisticas.setWheelScrollingEnabled(true);
+		scrollPanelEstadisticas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPanelEstadisticas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPanelEstadisticas.setBounds(24, 624, 735, 126);
+		contentPane.add(scrollPanelEstadisticas);
 		
 		JLabel lblNewLabel = new JLabel("Equipos sin arbitro");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -158,8 +163,11 @@ public class MainUI extends JFrame implements KeyListener{
 		panelAlgoritmoGoloso = new JPanel();
 		panelAlgoritmoGoloso.setLayout(null);
 		
+		panelEstadisticas = new JPanel();
+		panelEstadisticas.setLayout(null);
+		
 		partidoLabelIndex = new ArrayList<Integer>();
-				
+		
 		inicializarLogicaTP();
 		
 	}
@@ -305,6 +313,7 @@ public class MainUI extends JFrame implements KeyListener{
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							resaltarEquipo(local);
+							resetUIEstadisticas();
 							mostrarEstadisticas(local);
 						}
 					});
@@ -313,6 +322,7 @@ public class MainUI extends JFrame implements KeyListener{
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							resaltarEquipo(visitante);
+							resetUIEstadisticas();
 							mostrarEstadisticas(visitante);
 						}
 					});
@@ -341,43 +351,8 @@ public class MainUI extends JFrame implements KeyListener{
 	}
 	
 	public void mostrarEstadisticas(String equipo) {
-		JFreeChart graficoArbitros;
-		DefaultCategoryDataset datosArbitros = new DefaultCategoryDataset();
 		
 		HashMap<Integer, Integer> arbitros = new HashMap<Integer, Integer>();
-		
-		for(int arbitro = 1; arbitro <= cantidadArbitrosPorDefecto; arbitro++) {
-			arbitros.put(arbitro, 0);
-		}
-		for(Integer fecha: fechasUI.keySet()) {
-			for(Partido e: fechasUI.get(fecha)) {
-				if(e.getLocal().equals(equipo) || e.getVisitante().equals(equipo)) {
-					if(e.getArbitro() != 0)
-						arbitros.put(e.getArbitro(), arbitros.get(e.getArbitro())+1);
-				}
-			}
-		}
-		
-		for(int arbitro: arbitros.keySet()) {
-			datosArbitros.addValue(arbitros.get(arbitro), equipo, ""+arbitro);
-		}
-		graficoArbitros = ChartFactory.createBarChart(
-				"Cant. Arbitros", 
-				"Arbitro", 
-				"Cant. Veces",
-				datosArbitros, 
-				PlotOrientation.VERTICAL,
-				false,
-				true, 
-				false
-				);
-	
-		ChartPanel panel = new ChartPanel(graficoArbitros);
-		JFrame ventana = new JFrame("Grafico");
-		ventana.getContentPane().add(panel);
-		ventana.pack();
-		ventana.setVisible(true);
-		/*HashMap<Integer, Integer> arbitros = new HashMap<Integer, Integer>();
 		ArrayList<JLabel> labelsArbitros = new ArrayList<JLabel>();
 		
 		JLabel pEquipo = new JLabel("Equipo: " +equipo);
@@ -429,7 +404,7 @@ public class MainUI extends JFrame implements KeyListener{
 		
 		panelEstadisticas.setPreferredSize(new Dimension(espaciolabelarbitro, scrollPanelEstadisticas.getHeight()));
 		scrollPanelEstadisticas.setViewportView(panelEstadisticas);
-		contentPane.updateUI();*/
+		contentPane.updateUI();
 	}
 
 	protected void resaltarEquipo(String equipo) {
@@ -472,7 +447,10 @@ public class MainUI extends JFrame implements KeyListener{
 		scrollPaneArchivoCargado.setViewportView(null);
 		this.datosCargadosY = 10;
 	}
-
+	private void resetUIEstadisticas() {
+		panelEstadisticas.removeAll();
+		scrollPanelEstadisticas.setViewportView(null);
+	}
 	
 	public void colocarDatosDeArchivoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
 		if(fechas != null && !fechas.isEmpty()) {
