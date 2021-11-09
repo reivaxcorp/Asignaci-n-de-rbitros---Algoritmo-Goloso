@@ -6,7 +6,7 @@ import java.util.Random;
 public class FixtureGenerador {
 
 	private ArrayList<ArrayList<Partido>> fechas;
-	private int cantFechas = 22;
+	private int cantFechas = 13;
 	private int cantPartidosPorFecha = 0;
 
 	private Random seleccionAleatoria;
@@ -20,7 +20,6 @@ public class FixtureGenerador {
 		this.seleccionAleatoria = new Random();
 		crearListaPorDefectoEquipos();
 		generarFechas(equiposDisponibles); 
-		//informacionUI();
 	}
 
 	private void crearListaPorDefectoEquipos() {

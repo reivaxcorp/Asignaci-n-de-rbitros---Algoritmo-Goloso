@@ -31,6 +31,8 @@ public class MainUI extends JFrame implements KeyListener{
 	/**
 	 * 
 	 */
+	public static int cantidadArbitrosPorDefecto = 13;
+
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JScrollPane scrollPaneArchivoCargado;
@@ -45,7 +47,6 @@ public class MainUI extends JFrame implements KeyListener{
 	private final String NOMBRE_ARCHIVO_JSON = "fechas.json";
 	private int datosCargadosY = 10;
 	private int datosGeneradosGolosoY = 10;
-	private int cantidadArbitrosPorDefecto = 13;
 
 	private AlgoritmoGolosoMain golosoMain;
 	private JTextField cantidadArbitrostField;
@@ -173,10 +174,10 @@ public class MainUI extends JFrame implements KeyListener{
 	}
 
 	 private void inicializarLogicaTP() {
-		 FixtureGenerador fix = new FixtureGenerador();
+		 FixtureGenerador fixture = new FixtureGenerador();
 		// Creamos archivo y fechas por defecto
 		 this.golosoMain = new AlgoritmoGolosoMain();
-		 cargarDatosGuardados(fix);
+		 cargarDatosGuardados(fixture);
 	}
 
 	private void cargarDatosGuardados(FixtureGenerador fix) {
