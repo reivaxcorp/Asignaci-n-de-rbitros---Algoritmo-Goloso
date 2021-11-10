@@ -7,21 +7,21 @@ import java.util.HashMap;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
-import main.AlgoritmoGolosoMain;
+import main.AlgoritmoGoloso;
 import main.FixtureGenerador;
 import main.MainUI;
 import main.Partido;
 
 public class AlgoritmoGolosoMainTest {
 
-	private AlgoritmoGolosoMain algoritmoGolosoMain;
+	private AlgoritmoGoloso algoritmoGolosoMain;
 	private FixtureGenerador fixture;
  	
 	// ignoramos la generacion del arbicho en el disco
 	// lo manejaremos en la memoria. 
 	@Before
 	public void setup() {
-		this.algoritmoGolosoMain = new AlgoritmoGolosoMain();
+		this.algoritmoGolosoMain = new AlgoritmoGoloso();
 		
 		this.fixture = new FixtureGenerador();
 		HashMap<Integer, ArrayList<Partido>> fechas = 
@@ -265,6 +265,186 @@ public class AlgoritmoGolosoMainTest {
 		assertTrue(siguiente == 3);	
 	}
 
+	@Test 
+	public void getCantidadVecesArbitroEnEquipo_cantidad_False() {
+		
+		int cantArbitros = 4;
+		Partido mPartido = new Partido("Boca Juniors", "River Plate", -1);
+		HashMap<Integer, ArrayList<Partido>> fechas = getFechas();
+		// buscar todos los partidos en todas las fechas de los dos equipos del partido.
+		ArrayList<Partido> equipoLocal = algoritmoGolosoMain.obtenerPartidosEquipo(mPartido.getLocal(), fechas); 
+		ArrayList<Partido> equipoVisitante = algoritmoGolosoMain.obtenerPartidosEquipo(mPartido.getVisitante(), fechas);
+		
+		for(int partido = 0; partido < equipoLocal.size(); partido ++) {
+			if(equipoLocal.get(partido).getArbitro() == -1) {
+				if(partido  == 0) continue;
+				if(partido  == 1) continue;
+				equipoLocal.get(partido).setArbitro(1);
+			}
+		}
+		for(int partido = 0; partido < equipoVisitante.size(); partido ++) {
+			if(equipoVisitante.get(partido).getArbitro() == -1) {
+				if(partido  == 0) continue;
+				if(partido  == 1) continue;
+				if(partido  == 2) continue;
+				if(partido  == 4) continue;
+				equipoVisitante.get(partido).setArbitro(1);
+			}
+		}
+		
+		
+		HashMap<Integer, Integer> partidosDeLocal = 
+				algoritmoGolosoMain.getCantidadVecesArbitroEnEquipo(cantArbitros, equipoLocal);
+
+		HashMap<Integer, Integer> partidosDeVisitante = 
+				algoritmoGolosoMain.getCantidadVecesArbitroEnEquipo(cantArbitros, equipoVisitante);
+	
+		
+		// la cantidad de veces que se asigno corresponde a la cantidad de fechas. 
+		assertTrue(partidosDeLocal.get(1) == 11);
+		assertTrue(partidosDeVisitante.get(1) == 9);
+		
+	}
+	
+	@Test 
+	public void getCantidadVecesArbitroEnEquipo_cantidad_True() {
+		
+		int cantArbitros = 4;
+		Partido mPartido = new Partido("Boca Juniors", "River Plate", -1);
+		HashMap<Integer, ArrayList<Partido>> fechas = getFechas();
+		// buscar todos los partidos en todas las fechas de los dos equipos del partido.
+		ArrayList<Partido> equipoLocal = algoritmoGolosoMain.obtenerPartidosEquipo(mPartido.getLocal(), fechas); 
+		ArrayList<Partido> equipoVisitante = algoritmoGolosoMain.obtenerPartidosEquipo(mPartido.getVisitante(), fechas);
+		
+		for(int partido = 0; partido < equipoLocal.size(); partido ++) {
+			if(equipoLocal.get(partido).getArbitro() == -1) {
+				if(partido  == 0) continue;
+				if(partido  == 1) continue;
+				equipoLocal.get(partido).setArbitro(3);
+			}
+		}
+		for(int partido = 0; partido < equipoVisitante.size(); partido ++) {
+			if(equipoVisitante.get(partido).getArbitro() == -1) {
+				if(partido  == 12) continue;
+				equipoVisitante.get(partido).setArbitro(4);
+			}
+		}
+		
+		
+		HashMap<Integer, Integer> partidosDeLocal = 
+				algoritmoGolosoMain.getCantidadVecesArbitroEnEquipo(cantArbitros, equipoLocal);
+
+		HashMap<Integer, Integer> partidosDeVisitante = 
+				algoritmoGolosoMain.getCantidadVecesArbitroEnEquipo(cantArbitros, equipoVisitante);
+	
+		
+		// la cantidad de veces que se asigno corresponde a la cantidad de fechas. 
+		assertFalse(partidosDeLocal.get(3) == 12);
+		assertFalse(partidosDeVisitante.get(4) == 13);
+		
+	}
+	
+	@Test 
+	public void obtenerArbitroNoAsignado_ArbitroCuatro_False() {
+		// setup
+		int cantArbitros = 4;
+		int fechaActual = 0;
+		HashMap<Integer, ArrayList<Partido>> fechas = getFechas();
+		HashMap<Integer, Integer> partidosDeLocal = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> partidosDeVisitante = new HashMap<Integer, Integer>();
+		
+		partidosDeLocal.put(1, 100); 
+		partidosDeLocal.put(2, 2); 
+		partidosDeLocal.put(3, 2); 
+		partidosDeLocal.put(4, 5);
+		
+		partidosDeVisitante.put(1, 5);
+		partidosDeVisitante.put(2, 2); 
+		partidosDeVisitante.put(3, 1);
+		partidosDeVisitante.put(4, 10);
+
+    	ArrayList<Integer> arbitrosYaAsignadoEnFecha = algoritmoGolosoMain.obtenerArbitrosDeFecha(fechas.get(fechaActual));
+    	
+		
+    	
+    	// buscar un arbitro que no haya dirigido ambos equipos, de lo contrario retorna cero.
+    	int arbitroLibre = algoritmoGolosoMain.obtenerArbitroNoAsignado(arbitrosYaAsignadoEnFecha, cantArbitros, partidosDeLocal, partidosDeVisitante); 
+    	
+    	assertFalse(arbitroLibre == 4);
+	}
+	
+	@Test 
+	public void obtenerArbitroNoAsignado_ArbitroTres_True() {
+		// setup
+		int cantArbitros = 4;
+		int fechaActual = 0;
+		HashMap<Integer, ArrayList<Partido>> fechas = getFechas();
+		HashMap<Integer, Integer> partidosDeLocal = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> partidosDeVisitante = new HashMap<Integer, Integer>();
+		
+		partidosDeLocal.put(1, 100); 
+		partidosDeLocal.put(2, 2); 
+		//partidosDeLocal.put(3, 2); 
+		partidosDeLocal.put(4, 5);
+		
+		partidosDeVisitante.put(1, 5);
+		partidosDeVisitante.put(2, 2); 
+		//partidosDeVisitante.put(3, 1);
+		partidosDeVisitante.put(4, 10);
+
+    	ArrayList<Integer> arbitrosYaAsignadoEnFecha = algoritmoGolosoMain.obtenerArbitrosDeFecha(fechas.get(fechaActual));
+    	
+		
+    	
+    	// buscar un arbitro que no haya dirigido ambos equipos, de lo contrario retorna cero.
+    	int arbitroLibre = algoritmoGolosoMain.obtenerArbitroNoAsignado(arbitrosYaAsignadoEnFecha, cantArbitros, partidosDeLocal, partidosDeVisitante); 
+    	
+    	assertTrue(arbitroLibre == 3);
+	}
+	
+	@Test
+	public void menorCantidadDeArbitroRepetido_arbitroTrece_False() {
+		
+	 HashMap<Integer, ArrayList<Partido>> fechas = getFechas();
+	 int cantArbitros = 13;
+	 
+	 int [] arbitros = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; 
+	 int index = 0;
+		for(int fecha: fechas.keySet()) {
+			for(Partido p: fechas.get(fecha)) {
+					if(index < arbitros.length) {
+						p.setArbitro(arbitros[index]);
+						index ++;
+					}
+				}
+			}
+		int arbitro = algoritmoGolosoMain.menorCantidadDeArbitroRepetido(fechas, cantArbitros);
+	
+		assertFalse(arbitro == 13);
+		
+	}
+	
+	@Test
+	public void menorCantidadDeArbitroRepetido_arbitroDos_True() {
+		
+	 HashMap<Integer, ArrayList<Partido>> fechas = getFechas();
+	 int cantArbitros = 13;
+	 
+	 int [] arbitros = {1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; // falta el 2. 
+	 int index = 0;
+		for(int fecha: fechas.keySet()) {
+			for(Partido p: fechas.get(fecha)) {
+					if(index < arbitros.length) {
+						p.setArbitro(arbitros[index]);
+						index ++;
+					}
+				}
+			}
+		int arbitro = algoritmoGolosoMain.menorCantidadDeArbitroRepetido(fechas, cantArbitros);
+	
+		assertTrue(arbitro == 2);
+		
+	}
 	
 	private HashMap<Integer, ArrayList<Partido>> getFechas() {
 		return algoritmoGolosoMain.getFechas();

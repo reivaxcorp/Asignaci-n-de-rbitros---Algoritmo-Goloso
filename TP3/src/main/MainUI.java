@@ -26,12 +26,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 
-public class MainUI extends JFrame implements KeyListener{
+public class MainUI extends JFrame implements KeyListener {
 
 	/**
 	 * 
 	 */
-	public static int cantidadArbitrosPorDefecto = 13;
+	public static int cantidadArbitrosPorDefecto = 12;
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -48,7 +48,7 @@ public class MainUI extends JFrame implements KeyListener{
 	private int datosCargadosY = 10;
 	private int datosGeneradosGolosoY = 10;
 
-	private AlgoritmoGolosoMain golosoMain;
+	private AlgoritmoGoloso golosoMain;
 	private JTextField cantidadArbitrostField;
 	private HashMap<Integer, ArrayList<Partido>> fechasUI;
 	
@@ -93,7 +93,9 @@ public class MainUI extends JFrame implements KeyListener{
 		btnGenerarAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				 resetUIEstadisticas();
-				 mostrarResultadosAlgoritmoGoloso();
+				 resetUIAlgoritmoGoloso();  
+				 golosoMain.resetArbitros();
+				 calcularAlgoritmoGoloso();
 				 switchGenerarBtn();
 			}
 		});
@@ -156,6 +158,21 @@ public class MainUI extends JFrame implements KeyListener{
 		lblNewLabelCantidadArbitros.setBounds(311, 30, 104, 14);
 		contentPane.add(lblNewLabelCantidadArbitros);
 		
+		JButton resetButton = new JButton("Resetear");
+		resetButton.setToolTipText("Resetea datos");
+		resetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 resetUIFechasCargadas();
+				 resetUIAlgoritmoGoloso();
+				 resetUIEstadisticas();
+				 inicializarLogicaTP();
+				 calcularAlgoritmoGoloso();
+				 switchGenerarBtn();
+			}
+		});
+		resetButton.setBounds(670, 26, 89, 23);
+		contentPane.add(resetButton);
+		
 	
 		
 		panelArchivoCargado = new JPanel();
@@ -173,30 +190,51 @@ public class MainUI extends JFrame implements KeyListener{
 		
 	}
 
+	/**
+	 * Crea el archivo. json por defecto, luego crea la clase principal de nuestro algoritmo goloso. Luego procede a cargar los datos de nuestro archivo y la muestra en la interfaz. 
+	 */
 	 private void inicializarLogicaTP() {
-		 FixtureGenerador fixture = new FixtureGenerador();
+		 FixtureGenerador fixtureGenerador = new FixtureGenerador();
 		// Creamos archivo y fechas por defecto
-		 this.golosoMain = new AlgoritmoGolosoMain();
-		 cargarDatosGuardados(fixture);
+		 this.golosoMain = new AlgoritmoGoloso();
+		 cargarDatos(fixtureGenerador);
 	}
 
-	private void cargarDatosGuardados(FixtureGenerador fix) {
-		  new ArchivoJSON(fix.obtenerFechas(), NOMBRE_ARCHIVO_JSON);
-		  File file = new File("./"+NOMBRE_ARCHIVO_JSON);
+	 /**
+	  * Carga el archivo .json, y coloca los datos o las fechas, en nuestro algoritmo goloso para ser procesado.
+	  */
+	private void cargarDatos(FixtureGenerador fixtureGenerador) {
+		  File file = crearArchivo(fixtureGenerador);
 		  this.golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
 		  colocarDatosDeArchivoUI(golosoMain.getFechas());
 	}
+
+	private File crearArchivo(FixtureGenerador fixtureGenerador) {
+		new ArchivoJSON(fixtureGenerador.obtenerFechas(), NOMBRE_ARCHIVO_JSON);
+		  File file = new File("./"+NOMBRE_ARCHIVO_JSON);
+		return file;
+	}
 	
-	private void mostrarResultadosAlgoritmoGoloso() {
+	/**
+	 * Coloca los datos del archivo cargado en la interfaz, en el cuadro izquierdo. Recibe la fecha y la lista de partidos para esa fecha. Coloca la fecha y los partidos en cada llamada
+	 */
+	public void colocarDatosDeArchivoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
+		if(fechas != null && !fechas.isEmpty()) {
+			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
+			  colocarfechasDeArchivoUI(fecha, fechas.get(fecha));
+			}
+		} else {
+			throw new RuntimeException("Fechas incorrectas");
+		}
+	}
+	
+	/**
+	 * Muestra los resultados de nuestro algoritmo goloso en la interfaz, con la asignación de árbitros aleatoria.
+	 */
+	private void calcularAlgoritmoGoloso() {
 		
 		new Thread() {
-			    public void run() {
-			    	partidoLabelIndex.clear();
-					indexCountPartidoLabel = 0;
-					
-					resetUIAlgoritmoGoloso();  
-					golosoMain.resetArbitros();
-					
+			    public void run() {	
 					fechasUI = golosoMain.generarAlgoritmoGoloso(
 							   golosoMain.getFechas(),
 							   cantidadArbitrosPorDefecto);
@@ -207,48 +245,10 @@ public class MainUI extends JFrame implements KeyListener{
 		 
 	}
 
-	private void abrirArchivo() {
-		//Create a file chooser
-		final JFileChooser fc = new JFileChooser();
-		fc.setCurrentDirectory(new File("./"));
-		fc.setAcceptAllFileFilterUsed(false);
-		
-		fc.addChoosableFileFilter(new FileFilter() {
-			
-			@Override
-			public String getDescription() {
-				// TODO Auto-generated method stub
-				return "Solo Archivos *.json";
-			}
-			
-			@Override
-			public boolean accept(File f) {
-				 if (f.isDirectory()) {
-				        return true;
-				    }
-
-				    String extension = Utils.obtenerExtensionArchivo(f);
-				    if (extension != null) {
-				        if (extension.equals(EXTENCION)) {
-				             return true;
-				        } else {
-				            return false;
-				        }
-				    }
-
-				    return false;
-			}
-		});
-		int returnVal = fc.showOpenDialog(contentPane);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			resetUIFechasCargadas();
-			resetUIAlgoritmoGoloso();
-            File file = fc.getSelectedFile();
-            golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
-            colocarDatosDeArchivoUI(golosoMain.getFechas());
-        } 
-	}
-
+	
+	/**
+	Coloca los datos del archivo cargado en la interfaz, en el cuadro izquierdo. Recibe la fecha y la lista de partidos para esa fecha. Coloca la fecha y los partidos en cada llamada.
+ 	*/
 	public void colocarfechasDeArchivoUI(int fecha, ArrayList<Partido> partidos) {
 		// fecha
 		JLabel jlabel = new JLabel(
@@ -283,8 +283,9 @@ public class MainUI extends JFrame implements KeyListener{
 		
 	}
 	
-	
-	
+	/**
+	Coloca los datos procesados en la interfaz, en el cuadro derecho. Recibe la fecha y la lista de partidos para esa fecha, pero con los árbitros ya asignados. Coloca la fecha y los partidos en cada llamada, con sus respectivos árbitros. 
+	 */
 	public void colocarfechasAlgoritmoGoloso(int fecha, ArrayList<Partido> partidos) {
 		
 				
@@ -351,6 +352,9 @@ public class MainUI extends JFrame implements KeyListener{
 		
 	}
 	
+	/**
+	 * Coloca las estadísticas individuales de cada equipo al seleccionar un equipo del cuadro derecho con sus árbitros procesados, en el cuadro inferior veremos los árbitros y la cantidad de veces que fueron asignados esos árbitros para ese equipo. 
+	 */
 	public void mostrarEstadisticas(String equipo) {
 		
 		HashMap<Integer, Integer> arbitros = new HashMap<Integer, Integer>();
@@ -408,7 +412,26 @@ public class MainUI extends JFrame implements KeyListener{
 		contentPane.updateUI();
 	}
 
-	protected void resaltarEquipo(String equipo) {
+
+	
+   /**
+	Coloca los datos procesados en la interfaz, en el cuadro derecho. Recibe la fecha y la lista de partidos para esa fecha, pero con los árbitros ya asignados. Coloca la fecha y los partidos en cada llamada, con sus respectivos árbitros
+  */
+	public void colocarDatosDeAlgoritmoGolosoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
+		if(fechas != null && !fechas.isEmpty()) {
+			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
+			  colocarfechasAlgoritmoGoloso(fecha, fechas.get(fecha));
+			}
+		} else {
+			throw new RuntimeException("Fechas incorrectas");
+		}
+		switchGenerarBtn();
+	}
+	
+	/**
+	 * Selecciona de la lista de árbitros procesados, la selección de nuestro equipo, y resaltara al equipo seleccionado en cada fecha. 
+	 */
+	private void resaltarEquipo(String equipo) {
 		
 		// reset seleccion
 		for(Component c: panelAlgoritmoGoloso.getComponents()) {				
@@ -437,46 +460,42 @@ public class MainUI extends JFrame implements KeyListener{
 	
 		contentPane.updateUI();
 	}
-
+	
+	/**
+	 * Habilita y deshabilita nuestro botón de generar algoritmo goloso, cuando lo está procesando lo deshabilita y cuando termino de procesar lo deshabilita. 
+	 */
+	private void switchGenerarBtn() {
+		 btnGenerarAlgoritmo.setEnabled(!btnGenerarAlgoritmo.isEnabled());
+	}
+	
+	/**
+	 * Limpia los resultados, si generamos nuevo número de árbitros
+	 */
 	private void resetUIAlgoritmoGoloso() {
 		panelAlgoritmoGoloso.removeAll();
 		scrollPaneAlgoritmoGoloso.setViewportView(null);
 		this.datosGeneradosGolosoY = 10;
 	}
+	
+	/**
+	 * Limpia las fechas cargadas del cuadro derecho, al abrir un nuevo archivo
+	 */
 	private void resetUIFechasCargadas() {
 		panelArchivoCargado.removeAll();
 		scrollPaneArchivoCargado.setViewportView(null);
-		this.datosCargadosY = 10;
+		partidoLabelIndex.clear();
+		indexCountPartidoLabel = 0;
+		datosCargadosY = 10;
 	}
+	
+	/**
+	 * Borras las estadisticas del cuadro inferior, cuando seleccionamos otro nuevo equipo
+	 */
 	private void resetUIEstadisticas() {
 		panelEstadisticas.removeAll();
 		scrollPanelEstadisticas.setViewportView(null);
 	}
-	
-	public void colocarDatosDeArchivoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
-		if(fechas != null && !fechas.isEmpty()) {
-			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
-			  colocarfechasDeArchivoUI(fecha, fechas.get(fecha));
-			}
-		} else {
-			throw new RuntimeException("Fechas incorrectas");
-		}
-	}
-	
-	public void colocarDatosDeAlgoritmoGolosoUI(HashMap<Integer, ArrayList<Partido>> fechas) {
-		if(fechas != null && !fechas.isEmpty()) {
-			for(int fecha = 0; fecha < fechas.size(); fecha ++) {
-			  colocarfechasAlgoritmoGoloso(fecha, fechas.get(fecha));
-			}
-		} else {
-			throw new RuntimeException("Fechas incorrectas");
-		}
-		switchGenerarBtn();
-	}
 
-	private void switchGenerarBtn() {
-		 btnGenerarAlgoritmo.setEnabled(!btnGenerarAlgoritmo.isEnabled());
-	}
 	@Override
 	public void keyTyped(KeyEvent e) {
 	   // TODO no implemented
@@ -487,6 +506,10 @@ public class MainUI extends JFrame implements KeyListener{
 		// TODO no implemented
 	}
 
+	/**
+	 * Lee los datos colocados en la caja de texto para ingresar el número de árbitros, verificara que la cantidad sea mayor a cero, con una expresión regular
+	 */
+	@SuppressWarnings("static-access")
 	@Override
 	public void keyReleased(KeyEvent e) {
 		 Matcher disableGenerador = patternCantArbitros.matcher(cantidadArbitrostField.getText());
@@ -499,4 +522,63 @@ public class MainUI extends JFrame implements KeyListener{
 		 }
 		
 	}
+	
+	/**
+	 * Abre un archivo .json, que corresponda al formato establecido por defecto.
+	 */
+	private void abrirArchivo() {
+		
+		final JFileChooser fc = new JFileChooser();
+		fc.setCurrentDirectory(new File("./"));
+		fc.setAcceptAllFileFilterUsed(false);
+		
+		fc.addChoosableFileFilter(new FileFilter() {
+			
+			@Override
+			public String getDescription() {
+				// TODO Auto-generated method stub
+				return "Solo Archivos *.json";
+			}
+			
+			@Override
+			public boolean accept(File f) {
+				 if (f.isDirectory()) {
+				        return true;
+				    }
+
+				    String extension = obtenerExtensionArchivo(f);
+				    if (extension != null) {
+				        if (extension.equals(EXTENCION)) {
+				             return true;
+				        } else {
+				            return false;
+				        }
+				    }
+
+				    return false;
+			}
+		});
+		int returnVal = fc.showOpenDialog(contentPane);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			resetUIFechasCargadas();
+			resetUIAlgoritmoGoloso();
+            File file = fc.getSelectedFile();
+            golosoMain.setFechas(ArchivoJSON.leerArchivo(file.getName()).getFechas());
+            colocarDatosDeArchivoUI(golosoMain.getFechas());
+        } 
+	}
+	
+	/**
+	 Obtenemos la extension de un archivo a abrir
+	 */
+	 private  String obtenerExtensionArchivo(File f) {
+	        String ext = null;
+	        String s = f.getName();
+	        int i = s.lastIndexOf('.');
+
+	        if (i > 0 &&  i < s.length() - 1) {
+	            ext = s.substring(i+1).toLowerCase();
+	        }
+	        return ext;
+	    }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
-import main.AlgoritmoGolosoMain;
+import main.AlgoritmoGoloso;
 import main.FixtureGenerador;
 import main.MainUI;
 import main.Partido;
@@ -12,7 +12,7 @@ import main.Partido;
 public class MainUITest {
 
 	private MainUI mainUI;
-	private AlgoritmoGolosoMain algoritmoGolosoMain;
+	private AlgoritmoGoloso algoritmoGolosoMain;
 	private FixtureGenerador fixture;
 	
 
@@ -21,7 +21,7 @@ public class MainUITest {
 	@Before
 	public void setup() {
 		this.mainUI = new MainUI();
-		this.algoritmoGolosoMain = new AlgoritmoGolosoMain();
+		this.algoritmoGolosoMain = new AlgoritmoGoloso();
 		
 		this.fixture = new FixtureGenerador();
 		HashMap<Integer, ArrayList<Partido>> fechas = 

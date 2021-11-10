@@ -6,7 +6,7 @@ import java.util.Random;
 public class FixtureGenerador {
 
 	private ArrayList<ArrayList<Partido>> fechas;
-	private int cantFechas = 13;
+	private static int cantFechas = 13;
 	private int cantPartidosPorFecha = 0;
 
 	private Random seleccionAleatoria;
@@ -22,6 +22,9 @@ public class FixtureGenerador {
 		generarFechas(equiposDisponibles); 
 	}
 
+	/**
+	 * Crea la lista de equipos de defecto por medio del enum de nombre Equipos. 
+	 */
 	private void crearListaPorDefectoEquipos() {
 
 		for(Equipos equipo: Equipos.values()) {
@@ -30,6 +33,9 @@ public class FixtureGenerador {
 		actualizarCantidadPartidos();
 	}
 
+	/**
+	Genera las fechas, siempre que los equipos agregados sean pares. 	
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean generarFechas(ArrayList<String> equiposDisponibles) {
 		
@@ -47,6 +53,9 @@ public class FixtureGenerador {
 		return true;
 	}
 	
+	/**
+	Agrega un equipo, siempre que no exista en los equipos agregados y sea un nombre con longitud mayor a tres caracteres.
+	 */
 	public void agregarEquipo(String equipo) {
 		
 		if(equipo.equals("") && equipo.length() < 3)
@@ -59,6 +68,9 @@ public class FixtureGenerador {
 		actualizarCantidadPartidos();
 	}
 
+	/**
+	Arma los equipos en forma aleatoria, siempre removiendo el que se seleccionó y eligiendo nuevamente su rival
+	 */
 	private Partido armarEquipo(ArrayList<String> equipos) {
 
 		int posicionAleatoriaEquipoUno = seleccionAleatoria.nextInt(equipos.size());
@@ -94,7 +106,7 @@ public class FixtureGenerador {
 		return equiposDisponibles.contains(equipo);
 	}
 	
-	public int getCantFechas() {
+	public static int getCantFechas() {
 		return cantFechas;
 	}
 
